@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+  <bean id="itkMessageSender" class="uk.nhs.interoperability.source.ITKMessageSenderImpl">
+    <!-- 
+    	<property name="soapUsername"><value>QUIKTRACE</value></property>
+    -->
+  </bean>
+
+  <bean id="getNhsNumberOperation" class="uk.co.inhealthcare.open.smsc.operation.GetNHSNumberOperation">
+    <property name="serviceName"><value>SMSP Get NHS Number</value></property>
+    <property name="serviceProvider"><value>Inhealthcare:UAT</value></property>
+    <property name="serviceId"><value>urn:nhs-itk:services:201005:getNHSNumber-v1-0</value></property>
+    <property name="profileId"><value>urn:nhs-en:profile:getNHSNumberRequest-v1-0</value></property>
+    <property name="sender"><value>urn:nhs-uk:addressing:ods:RXF:QUIKTRACE</value></property>
+    <property name="toPayloadTransform"><value>xslt/smsc/ToGetNHSNumberRequest.xslt</value></property>
+  </bean>
+
+  <bean id="SpringContext" class="uk.co.inhealthcare.open.SpringContext" />
+  
+</beans>

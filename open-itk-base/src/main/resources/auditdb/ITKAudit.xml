@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="ITKAudit">
+
+    <resultMap id="result" type="ITKAudit">
+        <result property="id" column="id"/>
+        <result property="timestamp" column="timestamp"/>
+        <result property="type" column="type"/>
+        <result property="conversationId" column="conversationId"/>
+        <result property="trackingId" column="trackingId"/>
+        <result property="payloadId" column="payloadId"/>
+        <result property="serviceId" column="serviceId"/>
+        <result property="profileId" column="profileId"/>
+        <result property="senderAddress" column="senderAddress"/>
+        <result property="nhsNumber" column="nhsNumber"/>
+        <result property="localPatientId" column="localPatientId"/>
+        <result property="localAuditId" column="localAuditId"/>
+        <result property="spineRoleProfileId" column="spineRoleProfileId"/>
+        <result property="spineRoleId" column="spineRoleId"/>
+        <result property="spineUserId" column="spineUserId"/>
+    </resultMap> 
+ 
+    <insert id="insert" parameterType="ITKAudit" useGeneratedKeys="true" keyProperty="id">
+ 	   INSERT INTO public."ITKAudit" ("timestamp","type","conversationId","trackingId","payloadId",
+ 	   "serviceId","profileId","senderAddress","nhsNumber","localPatientId","localAuditId",
+ 	   "spineRoleProfileId","spineRoleId","spineUserId")
+        VALUES (#{timestamp}, #{type}, #{conversationId}, #{trackingId}, #{payloadId}, 
+        #{serviceId}, #{profileId}, #{senderAddress}, #{nhsNumber}, #{localPatientId}, #{localAuditId}, 
+        #{spineRoleProfileId}, #{spineRoleId}, #{spineUserId});
+    </insert>
+  
+</mapper>

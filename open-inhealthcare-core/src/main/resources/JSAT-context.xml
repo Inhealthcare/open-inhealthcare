@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:camel="http://camel.apache.org/schema/spring"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+    http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <bean id="hl7codec" class="org.apache.camel.component.hl7.HL7MLLPCodec">
+	   <property name="charset" value="iso-8859-1"/>
+	</bean>
+    <bean id="hl7dataformat" class="org.apache.camel.component.hl7.HL7DataFormat"/>
+	
+	<!-- Configure the transformations -->
+	<bean id="a05ToDemographicUpdate" class="uk.co.inhealthcare.open.smsc.transformations.A05ToDemographicUpdate_ITK"/>
+	<bean id="toPASUpdate" class="uk.co.inhealthcare.open.smsc.transformations.ToPASUpdate_ITK">
+	    <property name="sendingFacility"><value>RXX</value></property>
+	    <property name="receivingFacility"><value>RXX</value></property>
+	</bean>
+
+	<!-- Configure the message processors -->
+	<bean id="ackProcess" class="uk.co.inhealthcare.open.jsat.hl7.AckProcessor" />
+	<bean id="unknownProcess" class="uk.co.inhealthcare.open.jsat.hl7.UnknownProcessor" />
+	
+	<!-- 
+	<bean id="newRegistrationSMSCProcess" class="uk.co.inhealthcare.open.smsc.process.NewRegistrationProcess">
+	    <property name="transformIn" ref="a05ToDemographicUpdate"/>
+	    <property name="transformOut" ref="toPASUpdate"/>
+	    <property name="getPatientDetailsBySearchOperation" ref="getPatientDetailsBySearchOperation"/>
+	    <property name="getPatientDetailsByNHSNumberOperation" ref="getPatientDetailsByNHSNumberOperation"/>
+	    <property name="localAuditId" value="urn:nhs-uk:identity:ods:XXXX:System:JSAT"/>
+	    <property name="hl7Sender" ref="hl7Sender"/>
+	    <property name="technicalAlerter" ref="technicalAlertSender"/>
+	    <property name="businessAlerter" ref="businessAlertSender"/>
+	    <property name="smscLogger" ref="smscLogger"/>
+	</bean>
+	-->
+	
+	<bean id="newRegistrationSMSCProcess" class="uk.co.inhealthcare.open.smsc.process.NewRegistrationProcessUnified">
+	    <property name="transformIn" ref="a05ToDemographicUpdate"/>
+	    <property name="transformOut" ref="toPASUpdate"/>
+	    <property name="getPatientDetailsOperation" ref="getPatientDetailsOperation"/>
+	    <property name="localAuditId" value="urn:nhs-uk:identity:ods:XXXX:System:JSAT"/>
+	    <property name="hl7Sender" ref="hl7Sender"/>
+	    <property name="technicalAlerter" ref="technicalAlertSender"/>
+	    <property name="businessAlerter" ref="businessAlertSender"/>
+	    <property name="smscLogger" ref="smscLogger"/>
+	</bean>
+	<bean id="demographicUpdateSMSCProcess" class="uk.co.inhealthcare.open.smsc.process.DemographicUpdateProcess">
+	    <property name="transformIn" ref="a05ToDemographicUpdate"/>
+	    <property name="transformOut" ref="toPASUpdate"/>
+	    <property name="getNhsNumberOperation" ref="getNhsNumberOperation"/>
+	    <property name="verifyNhsNumberOperation" ref="verifyNhsNumberOperation"/>
+	    <property name="localAuditId" value="urn:nhs-uk:identity:ods:XXXX:System:JSAT"/>
+	    <property name="hl7Sender" ref="hl7Sender"/>
+	    <property name="technicalAlerter" ref="technicalAlertSender"/>
+	    <property name="businessAlerter" ref="businessAlertSender"/>
+	    <property name="smscLogger" ref="smscLogger"/>
+	</bean>
+
+	<!-- Configure the SMSC operations -->
+	<bean id="getNhsNumberOperation" class="uk.co.inhealthcare.open.smsc.operation.GetNHSNumberOperation">
+	    <property name="serviceProvider"><value>urn:nhs-uk:addressing:ods:TKW</value></property>
+	    <property name="serviceId"><value>urn:nhs-itk:services:201005:getNHSNumber-v1-0</value></property>
+	    <property name="profileId"><value>urn:nhs-en:profile:getNHSNumberRequest-v1-0</value></property>
+	    <property name="sender"><value>urn:nhs-uk:addressing:ods:XXXX:JSAT</value></property>
+    	<property name="toPayloadTransform"><value>xslt/smsc/ToGetNHSNumberRequest.xslt</value></property>
+	    <property name="itkMessageSender" ref="itkMessageSender"/>
+	    <property name="smscLogger" ref="smscLogger"/>
+	</bean>
+	
+	<bean id="verifyNhsNumberOperation" class="uk.co.inhealthcare.open.smsc.operation.VerifyNHSNumberOperation">
+	    <property name="serviceProvider"><value>urn:nhs-uk:addressing:ods:TKW</value></property>
+	    <property name="serviceId"><value>urn:nhs-itk:services:201005:verifyNHSNumber-v1-0</value></property>
+	    <property name="profileId"><value>urn:nhs-en:profile:verifyNHSNumberRequest-v1-0</value></property>
+	    <property name="sender"><value>urn:nhs-uk:addressing:ods:XXXX:JSAT</value></property>
+	    <property name="toPayloadTransform"><value>xslt/smsc/ToVerifyNHSNumberRequest.xslt</value></property>
+	    <property name="itkMessageSender" ref="itkMessageSender"/>
+	    <property name="smscLogger" ref="smscLogger"/>
+	</bean>
+	
+	<bean id="getPatientDetailsByNHSNumberOperation" class="uk.co.inhealthcare.open.smsc.operation.GetPatientDetailsByNHSNumberOperation">
+	    <property name="serviceProvider"><value>urn:nhs-uk:addressing:ods:TKW</value></property>
+	    <property name="serviceId"><value>urn:nhs-itk:services:201005:getPatientDetailsByNHSNumber-v1-0</value></property>
+	    <property name="profileId"><value>urn:nhs-en:profile:getPatientDetailsByNHSNumberRequest-v1-0</value></property>
+	    <property name="sender"><value>urn:nhs-uk:addressing:ods:XXXX:JSAT</value></property>
+	    <property name="toPayloadTransform"><value>xslt/smsc/ToGetPatientDetailsByNHSNumberRequest.xslt</value></property>
+	    <property name="itkMessageSender" ref="itkMessageSender"/>
+	    <property name="smscLogger" ref="smscLogger"/>
+	</bean>
+	
+	<bean id="getPatientDetailsBySearchOperation" class="uk.co.inhealthcare.open.smsc.operation.GetPatientDetailsBySearchOperation">
+	    <!-- 
+	    <property name="serviceProvider"><value>urn:nhs-uk:addressing:ods:InHealthcare:SMSP:UAT</value></property>
+	    --> 
+	    <property name="serviceProvider"><value>urn:nhs-uk:addressing:ods:TKW</value></property>
+	    <property name="serviceId"><value>urn:nhs-itk:services:201005:getPatientDetailsBySearch-v1-0</value></property>
+	    <property name="profileId"><value>urn:nhs-en:profile:getPatientDetailsBySearchRequest-v1-0</value></property>
+	    <property name="sender"><value>urn:nhs-uk:addressing:ods:XXXX:JSAT</value></property>
+	    <property name="toPayloadTransform"><value>xslt/smsc/ToGetPatientDetailsBySearchRequest.xslt</value></property>
+	    <property name="itkMessageSender" ref="itkMessageSender"/>
+	    <property name="smscLogger" ref="smscLogger"/>
+	</bean>
+
+	<bean id="getPatientDetailsOperation" class="uk.co.inhealthcare.open.smsc.operation.GetPatientDetailsOperation">
+	    <!-- 
+	    <property name="serviceProvider"><value>urn:nhs-uk:addressing:ods:InHealthcare:SMSP:UAT</value></property>
+	    --> 
+	    <property name="serviceProvider"><value>urn:nhs-uk:addressing:ods:TKW</value></property>
+	    <property name="serviceId"><value>urn:nhs-itk:services:201005:getPatientDetails-v1-0</value></property>
+	    <property name="profileId"><value>urn:nhs-en:profile:getPatientDetailsRequest-v1-0</value></property>
+	    <property name="sender"><value>urn:nhs-uk:addressing:ods:XXXX:JSAT</value></property>
+	    <property name="toPayloadTransform"><value>xslt/smsc/ToGetPatientDetailsRequest.xslt</value></property>
+	    <property name="itkMessageSender" ref="itkMessageSender"/>
+	    <property name="smscLogger" ref="smscLogger"/>
+	</bean>
+
+	<!-- Configure the ITK message sender -->
+	<bean id="itkMessageSender" class="uk.co.inhealthcare.open.itk.source.ITKMessageSenderImpl">
+	    <property name="itkSenderWS" ref="itkSenderWS"/>
+    	<property name="auditService" ref="auditService"/>
+    </bean>
+    
+	<!-- Configure the ITK WS message sender -->
+	<bean id="itkSenderWS" class="uk.co.inhealthcare.open.itk.transport.WS.ITKSenderWSImpl">
+    	<property name="soapUsername"><value>JSAT</value></property>
+    	<property name="soapFromAddress"><value>http://127.0.0.1:4000/syncsoap</value></property>
+    	<property name="toSoapTransform"><value>ToSOAP.xslt</value></property>
+    	<property name="transportService" ref="itkHttpSender"/>
+    	<property name="auditService" ref="auditService"/>
+    </bean>
+    
+	<!-- Configure the ITK HTTP sender -->
+	<bean id="itkHttpSender" class="uk.co.inhealthcare.open.itk.transport.HTTP.ITKTransportSenderHTTPImpl">
+    </bean>
+    
+	<!-- Configure the HL7 outbound message sender -->
+	<bean id="hl7Sender" class="uk.co.inhealthcare.open.jsat.services.HL7SenderImpl">
+	    <property name="template" ref="template"/>
+    </bean>
+    
+	<!-- Configure the email outbound message senders -->
+	<bean id="technicalAlertSender" class="uk.co.inhealthcare.open.jsat.services.EmailSenderImpl">
+	    <property name="template" ref="template"/>
+    	<property name="subject"><value>JSAT Technical Alert</value></property>
+    	<property name="contentTransformer"><value>xslt/jsat/ToStdTechnicalAlert.xslt</value></property>
+    	<property name="to"><value>TechnicalRecipient@MyServer.com</value></property>
+    	<property name="from"><value>SenderAddress@MyServer.com</value></property>
+    </bean>
+    
+	<bean id="businessAlertSender" class="uk.co.inhealthcare.open.jsat.services.EmailSenderImpl">
+	    <property name="template" ref="template"/>
+    	<property name="subject"><value>JSAT Business Alert</value></property>
+    	<property name="contentTransformer"><value>xslt/jsat/ToStdBusinessAlert.xslt</value></property>
+    	<property name="to"><value>BusinessRecipient@MyServer.com</value></property>
+    	<property name="from"><value>SenderAddress@MyServer.com</value></property>
+    </bean>
+	
+ 	<!-- Configure the Audit Service -->
+	<bean id="auditService" class="uk.co.inhealthcare.open.itk.service.ITKDBAuditImpl">
+    </bean>
+    
+ 	<!-- Configure the SMSC Logger -->
+	<bean id="smscLogger2" class="uk.co.inhealthcare.open.smsc.messages.logging.SimpleSMSCLoggingServiceImpl">
+    </bean>
+	<bean id="smscLogger" class="uk.co.inhealthcare.open.smsc.messages.logging.DatabaseSMSCLoggingServiceImpl">
+    </bean>
+    
+    <camel:camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+        <package>uk.co.inhealthcare.open.jsat.routes</package>
+		<template id="template"/> 
+        
+        <camel:endpoint id="smscListener"
+           uri="mina2:tcp://localhost:8889?sync=true&amp;codec=#hl7codec" />
+        <camel:endpoint id="pasUpdate"
+           uri="mina2:tcp://localhost:8880?sync=true&amp;codec=#hl7codec" />
+        <!-- TODO: Is there a way of securing these credentials? (other than just using a properties file)   -->
+        <camel:endpoint id="emailGateway"
+           uri="smtps://smtp.myserver.com:465?username=myEmail@myServer.com&amp;password=myPassword" />
+        
+    </camel:camelContext>
+    
+</beans>
