@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camel="http://camel.apache.org/schema/spring"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+    http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+	<context:property-placeholder
+		location="classpath:open-inhealthcare-router-defaults.properties" />
+
+	<bean id="hl7codec" class="org.apache.camel.component.hl7.HL7MLLPCodec">
+		<property name="charset" value="iso-8859-1" />
+	</bean>
+	<bean id="hl7dataformat" class="org.apache.camel.component.hl7.HL7DataFormat" />
+
+	<!-- Configure the message processors -->
+	<bean id="ackProcess" class="uk.co.inhealthcare.open.jsat.hl7.AckProcessor" />
+
+	<!-- Configure message handlers -->
+	<bean id="unsupportedHL7MessageHandler"
+		class="uk.co.inhealthcare.open.jsat.hl7.UnsupportedHL7MessageHandler" />
+	<bean id="hl7MessageDispatcher" class="uk.co.inhealthcare.open.jsat.hl7.HL7MessageDispatcher" />
+
+	<!-- Configure the email outbound message senders -->
+	<bean id="technicalAlertSender" class="uk.co.inhealthcare.open.jsat.services.EmailSenderImpl">
+		<property name="template" ref="template" />
+		<property name="subject">
+			<value>JSAT Technical Alert</value>
+		</property>
+		<property name="contentTransformer">
+			<value>xslt/jsat/ToStdTechnicalAlert.xslt</value>
+		</property>
+		<property name="to">
+			<value>TechnicalRecipient@MyServer.com</value>
+		</property>
+		<property name="from">
+			<value>SenderAddress@MyServer.com</value>
+		</property>
+	</bean>
+
+	<bean id="businessAlertSender" class="uk.co.inhealthcare.open.jsat.services.EmailSenderImpl">
+		<property name="template" ref="template" />
+		<property name="subject">
+			<value>JSAT Business Alert</value>
+		</property>
+		<property name="contentTransformer">
+			<value>xslt/jsat/ToStdBusinessAlert.xslt</value>
+		</property>
+		<property name="to">
+			<value>BusinessRecipient@MyServer.com</value>
+		</property>
+		<property name="from">
+			<value>SenderAddress@MyServer.com</value>
+		</property>
+	</bean>
+
+	<camel:camelContext id="camel"
+		xmlns="http://camel.apache.org/schema/spring">
+		<package>uk.co.inhealthcare.open.jsat.routes</package>
+		<template id="template" />
+
+		<camel:endpoint id="smscListener"
+			uri="mina2:tcp://localhost:${inbound.tcp.port}?sync=true&amp;codec=#hl7codec" />
+		<camel:endpoint id="pasUpdate"
+			uri="mina2:tcp://localhost:${pas.tcp.port}?sync=true&amp;codec=#hl7codec" />
+		<!-- TODO: Is there a way of securing these credentials? (other than just 
+			using a properties file) -->
+		<camel:endpoint id="emailGateway" uri="${email.gateway}" />
+
+	</camel:camelContext>
+
+</beans>
