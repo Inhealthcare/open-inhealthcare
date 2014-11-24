@@ -10,7 +10,7 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-*/
+ */
 
 package uk.co.inhealthcare.open.jsat.routes;
 
@@ -20,11 +20,8 @@ import org.apache.camel.builder.RouteBuilder;
  * Java DSL Route definition for the PAS Outbound channel
  */
 public class EmailOutbound extends RouteBuilder {
-    public void configure() throws Exception {
-        from("direct:EmailSender")
-        .to("emailGateway")
-        .end()
-        ;
- 
-    }
+	public void configure() throws Exception {
+		from("direct:EmailSender").routeId("email-outbound").to("emailGateway");
+
+	}
 }

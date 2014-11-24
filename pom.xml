@@ -26,6 +26,9 @@
 		<module>open-itk-api</module>
 		<module>open-itk-base</module>
 		<module>open-inhealthcare-core</module>
+		<module>open-inhealthcare-smsc</module>
+		<module>open-inhealthcare-nhs-number-lookup</module>
+		<module>open-inhealthcare-demo</module>		
 	</modules>
 
 </project>

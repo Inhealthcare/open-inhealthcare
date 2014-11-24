@@ -21,13 +21,12 @@ import org.apache.camel.builder.RouteBuilder;
  */
 public class JSATMainRouter extends RouteBuilder {
     public void configure() throws Exception {
-        from("smscListener").unmarshal("hl7dataformat")
-        .to("seda:hl7msgin?waitForTaskToComplete=Never")
-        .to("bean:ackProcess")
-        // end choice block
-        .end()
-	    // marshal response back
-	    .marshal("hl7dataformat");
+		from("smscListener")
+				.routeId("core-route")
+				.unmarshal("hl7dataformat")
+				.to("log:uk.co.inhealthcare.open.jsat.routes.JSATMainRouter?level=DEBUG&showAll=true&multiline=true")
+				.to("seda:hl7msgin?waitForTaskToComplete=Never")
+				.to("bean:ackProcess").marshal("hl7dataformat");
  
     }
 }

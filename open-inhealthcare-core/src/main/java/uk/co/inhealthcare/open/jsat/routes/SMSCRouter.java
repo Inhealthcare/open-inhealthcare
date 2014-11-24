@@ -10,7 +10,7 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-*/
+ */
 
 package uk.co.inhealthcare.open.jsat.routes;
 
@@ -20,18 +20,10 @@ import org.apache.camel.builder.RouteBuilder;
  * Java DSL Route definition for the main SMSC input channel and router.
  */
 public class SMSCRouter extends RouteBuilder {
-    public void configure() throws Exception {
-        from("seda:hl7msgin")
-        .choice()
-            .when(header("CamelHL7TriggerEvent").isEqualTo("A28"))
-                .to("bean:newRegistrationSMSCProcess")
-            .when(header("CamelHL7TriggerEvent").isEqualTo("A31"))
-                .to("bean:demographicUpdateSMSCProcess")
-            .otherwise()
-                .to("bean:unknownProcess")
-        // end choice block
-        .end()
-        ;
- 
-    }
+
+	public void configure() throws Exception {
+		from("seda:hl7msgin").routeId("smsc-router").to(
+				"bean:hl7MessageDispatcher");
+	}
+
 }
