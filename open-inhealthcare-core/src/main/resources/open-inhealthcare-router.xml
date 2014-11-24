@@ -27,32 +27,32 @@
 	<bean id="technicalAlertSender" class="uk.co.inhealthcare.open.jsat.services.EmailSenderImpl">
 		<property name="template" ref="template" />
 		<property name="subject">
-			<value>JSAT Technical Alert</value>
+			<value>${alerts.technical.email.subject}</value>
 		</property>
 		<property name="contentTransformer">
-			<value>xslt/jsat/ToStdTechnicalAlert.xslt</value>
+			<value>${alerts.technical.email.xslt}</value>
 		</property>
 		<property name="to">
-			<value>TechnicalRecipient@MyServer.com</value>
+			<value>${alerts.technical.email.to}</value>
 		</property>
 		<property name="from">
-			<value>SenderAddress@MyServer.com</value>
+			<value>${alerts.technical.email.from}</value>
 		</property>
 	</bean>
 
 	<bean id="businessAlertSender" class="uk.co.inhealthcare.open.jsat.services.EmailSenderImpl">
 		<property name="template" ref="template" />
 		<property name="subject">
-			<value>JSAT Business Alert</value>
+			<value>${alerts.business.email.subject}</value>
 		</property>
 		<property name="contentTransformer">
-			<value>xslt/jsat/ToStdBusinessAlert.xslt</value>
+			<value>${alerts.business.email.xslt}</value>
 		</property>
 		<property name="to">
-			<value>BusinessRecipient@MyServer.com</value>
+			<value>${alerts.business.email.to}</value>
 		</property>
 		<property name="from">
-			<value>SenderAddress@MyServer.com</value>
+			<value>${alerts.business.email.from}</value>
 		</property>
 	</bean>
 
@@ -62,9 +62,9 @@
 		<template id="template" />
 
 		<camel:endpoint id="smscListener"
-			uri="mina2:tcp://localhost:${inbound.tcp.port}?sync=true&amp;codec=#hl7codec" />
+			uri="mina2:tcp://localhost:${router.hl7.tcp.port}?sync=true&amp;codec=#hl7codec" />
 		<camel:endpoint id="pasUpdate"
-			uri="mina2:tcp://localhost:${pas.tcp.port}?sync=true&amp;codec=#hl7codec" />
+			uri="mina2:tcp://localhost:${pas.update.tcp.port}?sync=true&amp;codec=#hl7codec" />
 		<!-- TODO: Is there a way of securing these credentials? (other than just 
 			using a properties file) -->
 		<camel:endpoint id="emailGateway" uri="${email.gateway}" />

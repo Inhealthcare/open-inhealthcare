@@ -23,6 +23,7 @@ import org.apache.camel.ProducerTemplate;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
 
 import uk.co.inhealthcare.open.itk.transform.TransformManager;
 import uk.co.inhealthcare.open.jsat.AlertException;
@@ -42,7 +43,7 @@ public class EmailSenderImpl implements EmailSender {
 	
 	private ProducerTemplate template ;
 	private String subject;
-	private String contentTransformer;
+	private Resource contentTransformer;
 	private String to;
 	private String from;
 
@@ -54,7 +55,7 @@ public class EmailSenderImpl implements EmailSender {
 		this.subject = subject;
 	}
 
-	public void setContentTransformer(String contentTransformer) {
+	public void setContentTransformer(Resource contentTransformer) {
 		this.contentTransformer = contentTransformer;
 	}
 
@@ -81,7 +82,7 @@ public class EmailSenderImpl implements EmailSender {
 		map.put("ContentType", "text/html");
 		map.put("From", this.from);
 		
-		String htmlMessage = getContent(contentTransformer, conversationId, headline, message, 
+		String htmlMessage = getContent(conversationId, headline, message,
 				technicalContext, businessProcess, businessContext);
 		try{
 			template.sendBodyAndHeaders("direct:EmailSender", htmlMessage, map);
@@ -92,7 +93,8 @@ public class EmailSenderImpl implements EmailSender {
 		
 	}
 
-	private String getContent(String contentTransformer, String conversationId, String headline, String message, 
+	private String getContent(String conversationId, String headline,
+			String message,
 			String technicalContext, String businessProcess,
 			String businessContext) throws AlertException {
 
@@ -113,7 +115,9 @@ public class EmailSenderImpl implements EmailSender {
 
 		String serialisedMessage ="";
 		try {
-			serialisedMessage = TransformManager.doTransform(contentTransformer, XML);
+			serialisedMessage = TransformManager.doTransform(
+					contentTransformer.getFilename(),
+					contentTransformer.getInputStream(), XML, null);
 		} catch (Exception e) {
 			logger.error("Error creating email body.",e);
 			throw new AlertException(ERR_BUILDING_CONTEXT);

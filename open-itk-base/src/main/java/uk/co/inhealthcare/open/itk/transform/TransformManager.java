@@ -65,11 +65,39 @@ public class TransformManager {
 	 * @throws ITKMessagingException the iTK messaging exception
 	 */
 	public static String doTransform(String tname, String input, Map<String, String> parameters) throws ITKMessagingException {
+		InputStream tis = TransformManager.class.getResourceAsStream("/"
+				+ tname);
+		return doTransform(tname, tis, input, parameters);
+	}
+
+	/**
+	 * Do transform.
+	 *
+	 * @param tname
+	 *            the tname
+	 * @param input
+	 *            the input
+	 * @param parameters
+	 *            the parameters
+	 * @return the string
+	 * @throws ITKMessagingException
+	 *             the iTK messaging exception
+	 */
+	public static String doTransform(String tname, InputStream tis,
+			String input, Map<String, String> parameters)
+			throws ITKMessagingException {
 		
 		if ((tname == null)||(tname.isEmpty())) {
 			String eMsg = "Transformer name not provided";
 			logger.error(eMsg);
 			throw new ITKMessagingException(null, ITKMessagingException.PROCESSING_ERROR_NOT_RETRYABLE_CODE, eMsg);
+		}
+		if ((tis == null)) {
+			String eMsg = "Transformer input stream not provided";
+			logger.error(eMsg);
+			throw new ITKMessagingException(null,
+					ITKMessagingException.PROCESSING_ERROR_NOT_RETRYABLE_CODE,
+					eMsg);
 		}
 		if ((input == null)||(input.isEmpty())) {
 			String eMsg = "Transformation Input not provided";
@@ -80,8 +108,8 @@ public class TransformManager {
 		logger.trace("Transformation requested:"+tname);
     	String output = "";
     	
-	    TransformerFactory transformerFactory = TransformerFactory.newInstance();
-	    InputStream tis = TransformManager.class.getResourceAsStream("/"+tname);
+		TransformerFactory transformerFactory = TransformerFactory
+				.newInstance();
         StreamSource s = new StreamSource(tis);
 
         Templates t = null;
