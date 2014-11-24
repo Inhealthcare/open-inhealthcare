@@ -78,11 +78,11 @@ public abstract class SMSCProcess extends JSATComponent {
 	protected EmailSender technicalAlerter;
 	protected EmailSender businessAlerter;
 	protected SMSCLoggingService smscLogger; 
-	protected ProcessLoggingService processLoggingService;
+	protected ProcessLoggingService processLogger;
 
-	public void setProcessLoggingService(
+	public void setProcessLogger(
 			ProcessLoggingService processLoggingService) {
-		this.processLoggingService = processLoggingService;
+		this.processLogger = processLoggingService;
 	}
 	
 	public void setSmscLogger(SMSCLoggingService smscLogger) {
@@ -147,7 +147,7 @@ public abstract class SMSCProcess extends JSATComponent {
 			} 
 			
 			try {
-				processLoggingService.logSMSCProcessInput(conversationId,
+				processLogger.logSMSCProcessInput(conversationId,
 						update);
 			} catch (LoggingException e) {
 				logAndAlertFailure(conversationId, "Error logging inbound message", e.getMessage(), "","");
@@ -170,7 +170,7 @@ public abstract class SMSCProcess extends JSATComponent {
 		String outcome;
 		try {
 			outcome = processDetail(update, props);
-			processLoggingService.logSMSCProcessOutcome(
+			processLogger.logSMSCProcessOutcome(
 					props.getConversationId(), outcome);
 		} catch (HL7Exception e) {
 			logAndAlertFailure(props.getConversationId(), "HL7 Error sending PAS update:", e.getMessage(), props.getEncodedMSH(),update.toXml());
@@ -268,7 +268,7 @@ public abstract class SMSCProcess extends JSATComponent {
 		
 		if (smscLogger != null) {
 			try {
-				processLoggingService.logSMSCProcessOutcome(conversationId,
+				processLogger.logSMSCProcessOutcome(conversationId,
 						message);
 			} catch (LoggingException logEx) {
 				logger.error(ERR_UNABLE_TO_WRITE_SMSCLOG);

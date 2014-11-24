@@ -40,9 +40,13 @@ public class DatabaseSMSCLoggingServiceImpl implements SMSCLoggingService {
     private SqlSessionFactory sqlSessionFactory;
 	
     public DatabaseSMSCLoggingServiceImpl(){
-        sqlSessionFactory = SMSCLoggingDBConnectionFactory.getSqlSessionFactory();
         DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
    }
+
+	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
+		this.sqlSessionFactory = sqlSessionFactory;
+	}
+
 	public void logSMSPRequest(SMSPRequest request) throws LoggingException {
 		SMSPRequestLog log = new SMSPRequestLog();
 		String timestamp = DATE_FORMAT.format(Calendar.getInstance().getTime());
@@ -63,36 +67,6 @@ public class DatabaseSMSCLoggingServiceImpl implements SMSCLoggingService {
 		this.insertSMSPResponse(log);
 	}
 
-    /**
-     * Insert an instance of SMSCInput into the database.
-     * @param inputDetails the instance to be persisted.
-     */
-    private void insertSMSCInput(SMSCInput inputDetails){
- 
-        SqlSession session = sqlSessionFactory.openSession();
- 
-        try {
-            session.insert("SMSCInput.insert", inputDetails);
-            session.commit();
-        } finally {
-            session.close();
-        }
-    }		
-    /**
-     * Insert an instance of SMSCOutcome into the database.
-     * @param outcomeDetails the instance to be persisted.
-     */
-    private void insertSMSCOutcome(SMSCOutcome outcomeDetails){
- 
-        SqlSession session = sqlSessionFactory.openSession();
- 
-        try {
-            session.insert("SMSCOutcome.insert", outcomeDetails);
-            session.commit();
-        } finally {
-            session.close();
-        }
-    }		
     /**
      * Insert an instance of SMSPRequest into the database.
      * @param smspRequest the instance to be persisted.

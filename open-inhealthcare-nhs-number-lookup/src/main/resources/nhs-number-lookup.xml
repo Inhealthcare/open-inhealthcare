@@ -26,7 +26,7 @@
 		<property name="localAuditId" value="urn:nhs-uk:identity:ods:XXXX:System:JSAT"/> 
 		<property name="hl7Sender" ref="hl7Sender"/> <property name="technicalAlerter" 
 		ref="technicalAlertSender"/> <property name="businessAlerter" ref="businessAlertSender"/> 
-		<property name="smscLogger" ref="smscLogger"/> </bean> -->
+		<property name="smscLogger" ref="smscLogger"/><property name="processLogger" ref="processLogger" /> </bean> -->
 
 	<bean id="newRegistrationSMSCProcess"
 		class="uk.co.inhealthcare.open.smsc.process.NewRegistrationProcessUnified">
@@ -38,6 +38,7 @@
 		<property name="technicalAlerter" ref="technicalAlertSender" />
 		<property name="businessAlerter" ref="businessAlertSender" />
 		<property name="smscLogger" ref="smscLogger" />
+		<property name="processLogger" ref="processLogger" />
 	</bean>
 	<bean id="demographicUpdateSMSCProcess"
 		class="uk.co.inhealthcare.open.smsc.process.DemographicUpdateProcess">
@@ -50,6 +51,7 @@
 		<property name="technicalAlerter" ref="technicalAlertSender" />
 		<property name="businessAlerter" ref="businessAlertSender" />
 		<property name="smscLogger" ref="smscLogger" />
+		<property name="processLogger" ref="processLogger" />
 	</bean>
 
 	<!-- Configure the SMSC operations -->
@@ -206,6 +208,7 @@
 	</bean>
 	<bean id="smscLogger"
 		class="uk.co.inhealthcare.open.smsc.messages.logging.DatabaseSMSCLoggingServiceImpl">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
 
 	<!-- Configure the process Logger -->
@@ -214,6 +217,7 @@
 	</bean>
 	<bean id="processLogger"
 		class="uk.co.inhealthcare.open.jsat.logging.DatabaseSMSCLoggingServiceImpl">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
 
 </beans>

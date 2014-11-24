@@ -99,7 +99,7 @@ public class NewRegistrationProcessUnitTest extends TestCase {
 		process.setTechnicalAlerter(null);
 
 		process.process(null);
-		ProcessLoggingService_Mock logger = (ProcessLoggingService_Mock) process.processLoggingService;
+		ProcessLoggingService_Mock logger = (ProcessLoggingService_Mock) process.processLogger;
 		assertTrue(logger.parm_outcomeConversationId.get(0)!=null);
 		assertTrue(logger.parm_Outcome.get(0).contains(SMSCProcess.TECHALERT_NOT_CONFIGURED));
 			
@@ -111,7 +111,7 @@ public class NewRegistrationProcessUnitTest extends TestCase {
 		process.setBusinessAlerter(null);
 
 		process.process(null);
-		ProcessLoggingService_Mock logger = (ProcessLoggingService_Mock) process.processLoggingService;
+		ProcessLoggingService_Mock logger = (ProcessLoggingService_Mock) process.processLogger;
 		assertTrue(logger.parm_outcomeConversationId.get(0)!=null);
 		assertTrue(logger.parm_Outcome.get(0).contains(SMSCProcess.BUSALERT_NOT_CONFIGURED));
 			
@@ -126,7 +126,7 @@ public class NewRegistrationProcessUnitTest extends TestCase {
 		EmailSenderImpl_Mock techSender = (EmailSenderImpl_Mock) process.technicalAlerter;
 		assertTrue(techSender.message!=null);
 		assertTrue(techSender.message.equals(SMSCProcess.LOCALAUDITID_NOT_CONFIGURED));
-		ProcessLoggingService_Mock logger = (ProcessLoggingService_Mock) process.processLoggingService;
+		ProcessLoggingService_Mock logger = (ProcessLoggingService_Mock) process.processLogger;
 		assertTrue(logger.parm_outcomeConversationId.get(0)!=null);
 		assertTrue(logger.parm_Outcome.get(0).contains(SMSCProcess.LOCALAUDITID_NOT_CONFIGURED));
 			
@@ -141,7 +141,7 @@ public class NewRegistrationProcessUnitTest extends TestCase {
 		EmailSenderImpl_Mock techSender = (EmailSenderImpl_Mock) process.technicalAlerter;
 		assertTrue(techSender.message!=null);
 		assertTrue(techSender.message.equals(SMSCProcess.TRANSFORMERIN_NOT_CONFIGURED));
-		ProcessLoggingService_Mock logger = (ProcessLoggingService_Mock) process.processLoggingService;
+		ProcessLoggingService_Mock logger = (ProcessLoggingService_Mock) process.processLogger;
 		assertTrue(logger.parm_outcomeConversationId.get(0)!=null);
 		assertTrue(logger.parm_Outcome.get(0).contains(SMSCProcess.TRANSFORMERIN_NOT_CONFIGURED));
 			
@@ -156,7 +156,7 @@ public class NewRegistrationProcessUnitTest extends TestCase {
 		EmailSenderImpl_Mock techSender = (EmailSenderImpl_Mock) process.technicalAlerter;
 		assertTrue(techSender.message!=null);
 		assertTrue(techSender.message.equals(SMSCProcess.TRANSFORMEROUT_NOT_CONFIGURED));
-		ProcessLoggingService_Mock logger = (ProcessLoggingService_Mock) process.processLoggingService;
+		ProcessLoggingService_Mock logger = (ProcessLoggingService_Mock) process.processLogger;
 		assertTrue(logger.parm_outcomeConversationId.get(0)!=null);
 		assertTrue(logger.parm_Outcome.get(0).contains(SMSCProcess.TRANSFORMEROUT_NOT_CONFIGURED));
 			
@@ -171,7 +171,7 @@ public class NewRegistrationProcessUnitTest extends TestCase {
 		EmailSenderImpl_Mock techSender = (EmailSenderImpl_Mock) process.technicalAlerter;
 		assertTrue(techSender.message!=null);
 		assertTrue(techSender.message.equals(SMSCProcess.HL7SENDER_NOT_CONFIGURED));
-		ProcessLoggingService_Mock logger = (ProcessLoggingService_Mock) process.processLoggingService;
+		ProcessLoggingService_Mock logger = (ProcessLoggingService_Mock) process.processLogger;
 		assertTrue(logger.parm_outcomeConversationId.get(0)!=null);
 		assertTrue(logger.parm_Outcome.get(0).contains(SMSCProcess.HL7SENDER_NOT_CONFIGURED));
 			
@@ -188,7 +188,7 @@ public class NewRegistrationProcessUnitTest extends TestCase {
 		assertTrue(techSender.message!=null);
 		assertTrue(techSender.message.equals(SMSCProcess.ERR_REQUEST_NOT_PROVIDED));
 		assertTrue(techSender.conversationId!=null);
-		ProcessLoggingService_Mock logger = (ProcessLoggingService_Mock) process.processLoggingService;
+		ProcessLoggingService_Mock logger = (ProcessLoggingService_Mock) process.processLogger;
 		assertTrue(logger.parm_outcomeConversationId.get(0)!=null);
 		assertTrue(logger.parm_Outcome.get(0).contains(SMSCProcess.ERR_REQUEST_NOT_PROVIDED));
 
@@ -203,7 +203,7 @@ public class NewRegistrationProcessUnitTest extends TestCase {
 		// Prime the logger to FAIL
 		ProcessLoggingService_Mock logger = new ProcessLoggingService_Mock();
 		logger.primeSmscInputOutcome(SMSCLoggingService_Mock.FAIL);
-		process.setProcessLoggingService(logger);
+		process.setProcessLogger(logger);
 
 		process.process(request);
 
@@ -226,7 +226,7 @@ public class NewRegistrationProcessUnitTest extends TestCase {
 		// Prime the logger to FAIL
 		ProcessLoggingService_Mock logger = new ProcessLoggingService_Mock();
 		logger.primeSmscOutcomeOutcome(SMSCLoggingService_Mock.FAIL);
-		process.setProcessLoggingService(logger);
+		process.setProcessLogger(logger);
 
 		process.process(request);
 
@@ -251,7 +251,7 @@ public class NewRegistrationProcessUnitTest extends TestCase {
 		process.process(request);
 
 		// Confirm the input message is logged
-		ProcessLoggingService_Mock logger = (ProcessLoggingService_Mock) process.processLoggingService;
+		ProcessLoggingService_Mock logger = (ProcessLoggingService_Mock) process.processLogger;
 		assertTrue(logger.parm_inputConversationId.get(0)!=null); 
 		assertTrue(logger.parm_DemographicUpdate.get(0)!=null);
 		assertTrue(logger.parm_DemographicUpdate.get(0).getFamilyName().equals(VALID_SURNAME));
@@ -358,7 +358,7 @@ public class NewRegistrationProcessUnitTest extends TestCase {
 		process.process(request);
 
 		// Confirm the input message is logged
-		ProcessLoggingService_Mock logger = (ProcessLoggingService_Mock) process.processLoggingService;
+		ProcessLoggingService_Mock logger = (ProcessLoggingService_Mock) process.processLogger;
 		assertTrue(logger.parm_inputConversationId.get(0)!=null); 
 		assertTrue(logger.parm_DemographicUpdate.get(0)!=null);
 		assertTrue(logger.parm_DemographicUpdate.get(0).getNHSNumberStatus().equals(inStatus));
@@ -387,7 +387,7 @@ public class NewRegistrationProcessUnitTest extends TestCase {
 		process.process(request);
 
 		// Confirm the input message is logged
-		ProcessLoggingService_Mock logger = (ProcessLoggingService_Mock) process.processLoggingService;
+		ProcessLoggingService_Mock logger = (ProcessLoggingService_Mock) process.processLogger;
 		assertTrue(logger.parm_inputConversationId.get(0)!=null); 
 		assertTrue(logger.parm_DemographicUpdate.get(0)!=null);
 		assertTrue(logger.parm_DemographicUpdate.get(0).getNHSNumberStatus().equals(inStatus));
@@ -440,7 +440,7 @@ public class NewRegistrationProcessUnitTest extends TestCase {
 		process.process(request);
 
 		// Confirm the input message is logged
-		ProcessLoggingService_Mock logger = (ProcessLoggingService_Mock) process.processLoggingService;
+		ProcessLoggingService_Mock logger = (ProcessLoggingService_Mock) process.processLogger;
 		assertTrue(logger.parm_inputConversationId.get(0)!=null); 
 		assertTrue(logger.parm_DemographicUpdate.get(0)!=null);
 		assertTrue(logger.parm_DemographicUpdate.get(0).getNHSNumberStatus().equals(inStatus));
@@ -495,7 +495,7 @@ public class NewRegistrationProcessUnitTest extends TestCase {
 		process.setTransformOut(new ToPASUpdate_ITK());
 
 		// Set up Mock services
-		process.setProcessLoggingService(new ProcessLoggingService_Mock());
+		process.setProcessLogger(new ProcessLoggingService_Mock());
 		process.setSmscLogger(new SMSCLoggingService_Mock());
 		process.setTechnicalAlerter(new EmailSenderImpl_Mock());
 		process.setBusinessAlerter(new EmailSenderImpl_Mock());

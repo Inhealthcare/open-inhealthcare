@@ -2,10 +2,12 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camel="http://camel.apache.org/schema/spring"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="
-	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
-    http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="	
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+    http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+    http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd">
 
 	<context:property-placeholder
 		location="classpath:open-inhealthcare-router-defaults.properties" />
@@ -56,6 +58,8 @@
 		</property>
 	</bean>
 
+	<!-- camel configuration for routes and integration -->
+
 	<camel:camelContext id="camel"
 		xmlns="http://camel.apache.org/schema/spring">
 		<package>uk.co.inhealthcare.open.jsat.routes</package>
@@ -70,5 +74,34 @@
 		<camel:endpoint id="emailGateway" uri="${email.gateway}" />
 
 	</camel:camelContext>
+
+	<!-- datasource configuration -->
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${router.db.driverClass}" />
+		<property name="url" value="${router.db.url}" />
+		<property name="username" value="${router.db.username}" />
+		<property name="password" value="${router.db.password}" />
+	</bean>
+
+	<jdbc:initialize-database 
+		data-source="dataSource" ignore-failures="ALL">
+		<jdbc:script location="classpath*:SMSCInputCreate.sql" />
+		<jdbc:script location="classpath*:SMSCOutcomeCreate.sql" />
+		<jdbc:script location="classpath*:SMSPRequestCreate.sql" />
+		<jdbc:script location="classpath*:SMSPResponseCreate.sql" />
+	</jdbc:initialize-database>
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:smsclogdb/SqlMapConfig.xml" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
 
 </beans>
