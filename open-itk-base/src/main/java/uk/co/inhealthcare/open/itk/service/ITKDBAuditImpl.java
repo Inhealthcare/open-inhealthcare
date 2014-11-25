@@ -38,9 +38,12 @@ public class ITKDBAuditImpl implements AuditService {
     private SqlSessionFactory sqlSessionFactory;
 	 
     public ITKDBAuditImpl(){
-        sqlSessionFactory = AuditDBConnectionFactory.getSqlSessionFactory();
         DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
     }
+
+	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
+		this.sqlSessionFactory = sqlSessionFactory;
+	}
 	
 	@Override
 	public void auditITKRequest(ITKAuditDetails auditDetails) throws AuditException {

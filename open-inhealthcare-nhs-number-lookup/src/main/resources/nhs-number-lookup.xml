@@ -200,6 +200,7 @@
 
 	<!-- Configure the Audit Service -->
 	<bean id="auditService" class="uk.co.inhealthcare.open.itk.service.ITKDBAuditImpl">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
 
 	<!-- Configure the SMSC Logger -->
