@@ -65,7 +65,8 @@ public class ITKTransportSenderHTTPImpl implements ITKTransportSender {
 		
 		// The following code allows test certificates where the CN name does not match the hostname
 		// Consider if there is a more elegant way of achieving this.
-		String allowLocalHost = System.getProperty("JSAT.OverrideHostnameVerification");
+		String allowLocalHost = System.getProperty(
+				"JSAT.OverrideHostnameVerification", "N");
 		if (allowLocalHost.equalsIgnoreCase("Y")) {
 			logger.warn("JSAT configured to override hostname verification. Do not use this setting in Live");
 			javax.net.ssl.HttpsURLConnection.setDefaultHostnameVerifier(

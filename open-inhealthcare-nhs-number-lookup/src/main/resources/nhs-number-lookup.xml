@@ -200,7 +200,7 @@
 
 	<!-- Configure the Audit Service -->
 	<bean id="auditService" class="uk.co.inhealthcare.open.itk.service.ITKDBAuditImpl">
-		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+		<property name="sqlSessionFactory" ref="itkSqlSessionFactory" />
 	</bean>
 
 	<!-- Configure the SMSC Logger -->
@@ -209,7 +209,7 @@
 	</bean>
 	<bean id="smscLogger"
 		class="uk.co.inhealthcare.open.smsc.messages.logging.DatabaseSMSCLoggingServiceImpl">
-		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+		<property name="sqlSessionFactory" ref="smscSqlSessionFactory" />
 	</bean>
 
 	<!-- Configure the process Logger -->
@@ -218,7 +218,18 @@
 	</bean>
 	<bean id="processLogger"
 		class="uk.co.inhealthcare.open.jsat.logging.DatabaseProcessLoggingServiceImpl">
-		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+		<property name="sqlSessionFactory" ref="smscSqlSessionFactory" />
 	</bean>
+
+	<bean id="smscSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:smsclogdb/SqlMapConfig.xml" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="itkSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:auditdb/SqlMapConfig.xml" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
 
 </beans>
