@@ -85,12 +85,8 @@
 		<property name="password" value="${router.db.password}" />
 	</bean>
 
-	<jdbc:initialize-database 
-		data-source="dataSource" ignore-failures="ALL">
-		<jdbc:script location="classpath*:SMSCInputCreate.sql" />
-		<jdbc:script location="classpath*:SMSCOutcomeCreate.sql" />
-		<jdbc:script location="classpath*:SMSPRequestCreate.sql" />
-		<jdbc:script location="classpath*:SMSPResponseCreate.sql" />
+	<jdbc:initialize-database data-source="dataSource" >
+		<jdbc:script location="classpath*:*db/*.sql" />
 	</jdbc:initialize-database>
 
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
