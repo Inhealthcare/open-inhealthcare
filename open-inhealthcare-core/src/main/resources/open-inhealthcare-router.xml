@@ -75,29 +75,29 @@
 
 	</camel:camelContext>
 
-	<!-- datasource configuration -->
+<!-- datasource configuration -->
 
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
-		destroy-method="close">
-		<property name="driverClassName" value="${router.db.driverClass}" />
-		<property name="url" value="${router.db.url}" />
-		<property name="username" value="${router.db.username}" />
-		<property name="password" value="${router.db.password}" />
-	</bean>
+<!-- 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" -->
+<!-- 		destroy-method="close"> -->
+<!-- 		<property name="driverClassName" value="${router.db.driverClass}" /> -->
+<!-- 		<property name="url" value="${router.db.url}" /> -->
+<!-- 		<property name="username" value="${router.db.username}" /> -->
+<!-- 		<property name="password" value="${router.db.password}" /> -->
+<!-- 	</bean> -->
 
-	<jdbc:initialize-database data-source="dataSource" >
-		<jdbc:script location="classpath*:*db/*.sql" />
-	</jdbc:initialize-database>
+<!-- 	<jdbc:initialize-database data-source="dataSource" > -->
+<!-- 		<jdbc:script location="classpath*:*db/*.sql" /> -->
+<!-- 	</jdbc:initialize-database> -->
 
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="configLocation" value="classpath:smsclogdb/SqlMapConfig.xml" />
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
-	<bean id="transactionManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
+<!-- 	<bean id="transactionManager" -->
+<!-- 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> -->
+<!-- 		<property name="dataSource" ref="dataSource" /> -->
+<!-- 	</bean> -->
 
 
 </beans>

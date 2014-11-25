@@ -38,12 +38,16 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- open inhealthcare dependencies -->
 		<dependency>
-			<groupId>uk.co.inhealthcare.open</groupId>
-			<artifactId>open-inhealthcare-core</artifactId>
-			<version>${project.version}</version>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+		</dependency>
+
+		<!-- open inhealthcare dependencies -->
 		<dependency>
 			<groupId>uk.co.inhealthcare.open</groupId>
 			<artifactId>open-inhealthcare-nhs-number-lookup</artifactId>

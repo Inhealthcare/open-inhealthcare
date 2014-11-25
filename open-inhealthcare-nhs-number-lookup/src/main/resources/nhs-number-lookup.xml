@@ -214,10 +214,10 @@
 
 	<!-- Configure the process Logger -->
 	<bean id="processLogger2"
-		class="uk.co.inhealthcare.open.jsat.logging.SimpleSMSCLoggingServiceImpl">
+		class="uk.co.inhealthcare.open.jsat.logging.SimpleProcessLoggingServiceImpl">
 	</bean>
 	<bean id="processLogger"
-		class="uk.co.inhealthcare.open.jsat.logging.DatabaseSMSCLoggingServiceImpl">
+		class="uk.co.inhealthcare.open.jsat.logging.DatabaseProcessLoggingServiceImpl">
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
 

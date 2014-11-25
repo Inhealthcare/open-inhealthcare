@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+  <properties resource="smsclogdb/db.properties"/>
   <typeAliases>
   	<typeAlias alias="SMSCInput" type="uk.co.inhealthcare.open.smsc.messages.logging.SMSCInput"/>
    	<typeAlias alias="SMSCOutcome" type="uk.co.inhealthcare.open.smsc.messages.logging.SMSCOutcome"/>
   	<typeAlias alias="SMSPRequest" type="uk.co.inhealthcare.open.smsc.messages.logging.SMSPRequestLog"/>
   	<typeAlias alias="SMSPResponse" type="uk.co.inhealthcare.open.smsc.messages.logging.SMSPResponseLog"/>
   </typeAliases>
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="${driver}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+      </dataSource>
+    </environment>
+  </environments>
   <mappers>
     <mapper resource="smsclogdb/SMSCInput.xml"/>
     <mapper resource="smsclogdb/SMSCOutcome.xml"/>

@@ -6,12 +6,12 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import uk.co.inhealthcare.open.jsat.OpenInhealthcareRouter;
+import uk.co.inhealthcare.open.jsat.OpenInhealthcareRouterConfig;
 
 @Configuration
 @ComponentScan
 @EnableAutoConfiguration
-@Import(OpenInhealthcareRouter.class)
+@Import(OpenInhealthcareRouterConfig.class)
 public class Application {
 
     public static void main(String[] args) {
