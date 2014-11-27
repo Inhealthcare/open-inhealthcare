@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ImportResource;
 
 import uk.co.inhealthcare.open.jsat.OpenInhealthcareRouterConfig;
 
@@ -12,6 +13,7 @@ import uk.co.inhealthcare.open.jsat.OpenInhealthcareRouterConfig;
 @ComponentScan
 @EnableAutoConfiguration
 @Import(OpenInhealthcareRouterConfig.class)
+@ImportResource("mybatis-context.xml")
 public class Application {
 
     public static void main(String[] args) {

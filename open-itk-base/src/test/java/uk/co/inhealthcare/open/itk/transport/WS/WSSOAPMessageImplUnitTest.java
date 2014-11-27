@@ -1,17 +1,13 @@
 package uk.co.inhealthcare.open.itk.transport.WS;
 
-import java.io.IOException;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-
-import junit.framework.TestCase;
 
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
 
 import uk.co.inhealthcare.open.itk.infrastructure.ITKAddressImpl;
 import uk.co.inhealthcare.open.itk.infrastructure.ITKMessagePropertiesImpl;
@@ -19,14 +15,14 @@ import uk.co.inhealthcare.open.itk.infrastructure.ITKMessagingException;
 import uk.co.inhealthcare.open.itk.payload.ITKMessage;
 import uk.co.inhealthcare.open.itk.payload.ITKSimpleMessageImpl;
 import uk.co.inhealthcare.open.itk.service.ITKSimpleDOSImpl;
+import uk.co.inhealthcare.open.itk.test.TestUtils;
 import uk.co.inhealthcare.open.itk.transport.ITKTransportProperties;
 import uk.co.inhealthcare.open.itk.transport.ITKTransportPropertiesImpl;
 import uk.co.inhealthcare.open.itk.transport.ITKTransportRoute;
-import uk.co.inhealthcare.open.itk.transport.WS.WSSOAPMessageImpl;
 import uk.co.inhealthcare.open.itk.util.xml.DomUtils;
 import uk.co.inhealthcare.open.itk.util.xml.XPaths;
 
-public class WSSOAPMessageImplUnitTest extends TestCase {
+public class WSSOAPMessageImplUnitTest {
 	
 	private final static String SERVICE_ID = "urn:nhs-itk:services:201005:testServiceA-v1-0";
 	private final static String PROVIDER_EXPLICIT = "urn:nhs-uk:addressing:ods:EXPLICIT";
@@ -46,9 +42,10 @@ public class WSSOAPMessageImplUnitTest extends TestCase {
 	}
 
 	@Test
-	public void testConstructorNullMsgProperties() {
+	public void testConstructorNullMsgProperties() throws Exception {
 		ITKMessage msg = new ITKSimpleMessageImpl();
 		ITKSimpleDOSImpl dos = new ITKSimpleDOSImpl();
+		TestUtils.loadTestProperties(dos);
 		ITKTransportRoute destination = null;
 		
 		try {
@@ -66,13 +63,14 @@ public class WSSOAPMessageImplUnitTest extends TestCase {
 	}
 
 	@Test
-	public void testConstructor() {
+	public void testConstructor() throws Exception {
 
 		ITKMessage msg = new ITKSimpleMessageImpl();
 		msg.setMessageProperties(new ITKMessagePropertiesImpl());
 		msg.getMessageProperties().setServiceId(SERVICE_ID);
 		
 		ITKSimpleDOSImpl dos = new ITKSimpleDOSImpl();
+		TestUtils.loadTestProperties(dos);
 		ITKTransportRoute destination = null;
 		
 		try {
@@ -98,13 +96,14 @@ public class WSSOAPMessageImplUnitTest extends TestCase {
 		
 	}
 	@Test
-	public void testBuildFullMessageNoTemplate() {
+	public void testBuildFullMessageNoTemplate() throws Exception {
 
 		ITKMessage msg = new ITKSimpleMessageImpl();
 		msg.setMessageProperties(new ITKMessagePropertiesImpl());
 		msg.getMessageProperties().setServiceId(SERVICE_ID);
 		
 		ITKSimpleDOSImpl dos = new ITKSimpleDOSImpl();
+		TestUtils.loadTestProperties(dos);
 		ITKTransportRoute destination = null;
 		
 		try {
@@ -134,7 +133,7 @@ public class WSSOAPMessageImplUnitTest extends TestCase {
 		}
 	}
 	@Test
-	public void testBuildFullMessage() throws SAXException, IOException, ParserConfigurationException, XPathExpressionException {
+	public void testBuildFullMessage() throws Exception {
 
 		// As set from a directory.properties lookup
 		String soapToAddress = "https://localhost:4848/Explicit";
@@ -155,6 +154,7 @@ public class WSSOAPMessageImplUnitTest extends TestCase {
 		}
 		
 		ITKSimpleDOSImpl dos = new ITKSimpleDOSImpl();
+		TestUtils.loadTestProperties(dos);
 		ITKTransportRoute destination = null;
 		
 		try {

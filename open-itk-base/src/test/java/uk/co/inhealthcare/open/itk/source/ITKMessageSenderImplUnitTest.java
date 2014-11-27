@@ -1,7 +1,9 @@
 package uk.co.inhealthcare.open.itk.source;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import uk.co.inhealthcare.open.itk.capabilities.AuditService;
@@ -16,11 +18,11 @@ import uk.co.inhealthcare.open.itk.infrastructure.ITKMessagingException;
 import uk.co.inhealthcare.open.itk.payload.ITKMessage;
 import uk.co.inhealthcare.open.itk.payload.ITKSimpleMessageImpl;
 import uk.co.inhealthcare.open.itk.service.ITKSimpleAudit_Mock;
-import uk.co.inhealthcare.open.itk.source.ITKMessageSender;
-import uk.co.inhealthcare.open.itk.source.ITKMessageSenderImpl;
+import uk.co.inhealthcare.open.itk.service.ITKSimpleDOSImpl;
+import uk.co.inhealthcare.open.itk.test.TestUtils;
 import uk.co.inhealthcare.open.itk.transport.WS.ITKSenderWSImpl_Mock;
 
-public class ITKMessageSenderImplUnitTest extends TestCase {
+public class ITKMessageSenderImplUnitTest {
 
 	private final static String SERVICE_ID = "urn:nhs-itk:services:201005:testServiceA-v1-0";
 	private final static String SERVICE_ID_NO_SYNC = "urn:nhs-itk:services:201005:testServiceD-v1-0";
@@ -43,10 +45,22 @@ public class ITKMessageSenderImplUnitTest extends TestCase {
 	private final static String LOCAL_PATIENT_ID = "LocalPatientId.0001";
 	private final static String NHS_NUMBER = "1234512345";
 
-	public void testAsyncNotImplemented() throws ITKMessagingException {
+	private ITKMessageSenderImpl sender;
+
+	@Before
+	public void setup() throws Exception {
+
+		// Configure Sender
+		ITKSimpleDOSImpl itkSimpleDOS = new ITKSimpleDOSImpl();
+		TestUtils.loadTestProperties(itkSimpleDOS);
+		sender = new ITKMessageSenderImpl();
+		sender.setDirectoryOfServices(itkSimpleDOS);
+
+	}
+
+	@Test
+	public void testAsyncNotImplemented() throws Exception {
 		
-		//Configure Sender
-		ITKMessageSenderImpl sender = new ITKMessageSenderImpl();
 		sender.setItkSenderWS(new ITKSenderWSImpl_Mock());
 
 		try {
@@ -57,10 +71,10 @@ public class ITKMessageSenderImplUnitTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testSendNotImplemented() throws ITKMessagingException {
 		
 		//Configure Sender
-		ITKMessageSenderImpl sender = new ITKMessageSenderImpl();
 		sender.setItkSenderWS(new ITKSenderWSImpl_Mock());
 
 		try {
@@ -70,9 +84,10 @@ public class ITKMessageSenderImplUnitTest extends TestCase {
 			assertTrue(e.getMessage().contains("Send Not Yet Implemented"));
 		}
 	}
+
+	@Test
 	public void testNoRequest() {
 		//Configure Sender
-		ITKMessageSenderImpl sender = new ITKMessageSenderImpl();
 		sender.setItkSenderWS(new ITKSenderWSImpl_Mock());
 
 		try {
@@ -83,9 +98,9 @@ public class ITKMessageSenderImplUnitTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testMissingProperties() {
 		//Configure Sender
-		ITKMessageSenderImpl sender = new ITKMessageSenderImpl();
 		sender.setItkSenderWS(new ITKSenderWSImpl_Mock());
 
 		ITKMessage request = new ITKSimpleMessageImpl();
@@ -97,9 +112,9 @@ public class ITKMessageSenderImplUnitTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testNoServiceId() {
 		//Configure Sender
-		ITKMessageSenderImpl sender = new ITKMessageSenderImpl();
 		sender.setItkSenderWS(new ITKSenderWSImpl_Mock());
 		
 		ITKMessage request = new ITKSimpleMessageImpl();
@@ -114,8 +129,8 @@ public class ITKMessageSenderImplUnitTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testNoSender() throws ITKMessagingException {
-		ITKMessageSender sender = new ITKMessageSenderImpl();
 		try {
 			sender.sendSync(getGoodRequest());
 			fail("Should throw an ITKMessagingException");
@@ -123,6 +138,8 @@ public class ITKMessageSenderImplUnitTest extends TestCase {
 			assertTrue(e.getMessage().contains("ITK Sender has not been configured"));
 		}
 	}
+
+	@Test
 	public void testSendNoServiceId() throws ITKMessagingException {
 
 		ITKAddress provider = new ITKAddressImpl(SERVICE_PROVIDER);
@@ -133,7 +150,6 @@ public class ITKMessageSenderImplUnitTest extends TestCase {
 		props.setToAddress(provider);
 		
 		//Configure Sender
-		ITKMessageSenderImpl sender = new ITKMessageSenderImpl();
 		sender.setItkSenderWS(new ITKSenderWSImpl_Mock());
 		try {
 			sender.sendSync(request);
@@ -142,6 +158,8 @@ public class ITKMessageSenderImplUnitTest extends TestCase {
 			assertTrue(e.getMessage().contains("Service Id is null"));
 		}
 	}
+
+	@Test
 	public void testSendNoProfileId() throws ITKMessagingException {
 
 		ITKAddress provider = new ITKAddressImpl(SERVICE_PROVIDER);
@@ -153,7 +171,6 @@ public class ITKMessageSenderImplUnitTest extends TestCase {
 		props.setServiceId(SERVICE_ID);
 		
 		//Configure Sender
-		ITKMessageSenderImpl sender = new ITKMessageSenderImpl();
 		sender.setItkSenderWS(new ITKSenderWSImpl_Mock());
 		try {
 			sender.sendSync(request);
@@ -162,6 +179,8 @@ public class ITKMessageSenderImplUnitTest extends TestCase {
 			assertTrue(e.getMessage().contains("Profile Id is null"));
 		}
 	}
+
+	@Test
 	public void testSendNoFromAddress1() throws ITKMessagingException {
 
 		// From address not set
@@ -175,7 +194,6 @@ public class ITKMessageSenderImplUnitTest extends TestCase {
 		props.setProfileId(PROFILE_ID);
 		
 		//Configure Sender
-		ITKMessageSenderImpl sender = new ITKMessageSenderImpl();
 		sender.setItkSenderWS(new ITKSenderWSImpl_Mock());
 		try {
 			sender.sendSync(request);
@@ -184,6 +202,8 @@ public class ITKMessageSenderImplUnitTest extends TestCase {
 			assertTrue(e.getMessage().contains("From Address is null"));
 		}
 	}
+
+	@Test
 	public void testSendNoFromAddress2() throws ITKMessagingException {
 
 		// From address set but not properly
@@ -198,7 +218,6 @@ public class ITKMessageSenderImplUnitTest extends TestCase {
 		props.setFromAddress(new ITKAddressImpl(null));
 		
 		//Configure Sender
-		ITKMessageSenderImpl sender = new ITKMessageSenderImpl();
 		sender.setItkSenderWS(new ITKSenderWSImpl_Mock());
 		try {
 			sender.sendSync(request);
@@ -208,6 +227,7 @@ public class ITKMessageSenderImplUnitTest extends TestCase {
 		}
 	}
 	
+	@Test
 	public void testSendBadResponseProfile() throws ITKMessagingException {
 
 		// From address set but not properly
@@ -222,7 +242,6 @@ public class ITKMessageSenderImplUnitTest extends TestCase {
 		props.setFromAddress(new ITKAddressImpl(FROM_ADDRESS));
 		
 		//Configure Sender
-		ITKMessageSenderImpl sender = new ITKMessageSenderImpl();
 		ITKSenderWSImpl_Mock itkSender = new ITKSenderWSImpl_Mock();
 		itkSender.primeResponse("BadProfileDE.xml");
 		sender.setItkSenderWS(itkSender);
@@ -249,7 +268,6 @@ public class ITKMessageSenderImplUnitTest extends TestCase {
 		props.setFromAddress(new ITKAddressImpl(FROM_ADDRESS));
 		
 		//Configure Sender
-		ITKMessageSenderImpl sender = new ITKMessageSenderImpl();
 		sender.setItkSenderWS(new ITKSenderWSImpl_Mock());
 		
 		ITKSimpleAudit_Mock auditService = new ITKSimpleAudit_Mock();
@@ -274,6 +292,8 @@ public class ITKMessageSenderImplUnitTest extends TestCase {
 		}
 
 	}
+
+	@Test
 	public void testAudit() throws ITKMessagingException {
 		ITKAddress provider = new ITKAddressImpl(SERVICE_PROVIDER);
 		
@@ -295,7 +315,6 @@ public class ITKMessageSenderImplUnitTest extends TestCase {
 		props.addPatientIdentity(new ITKIdentityImpl(NHS_NUMBER, ITKIdentity.NHS_NUMBER_TYPE));
 		
 		//Configure Sender
-		ITKMessageSenderImpl sender = new ITKMessageSenderImpl();
 		sender.setItkSenderWS(new ITKSenderWSImpl_Mock());
 
 		ITKSimpleAudit_Mock auditService = new ITKSimpleAudit_Mock();
@@ -332,6 +351,7 @@ public class ITKMessageSenderImplUnitTest extends TestCase {
 		assertTrue(itkResponseAudit.getSenderAddress().equals(RESPONSE_SENDER_ADDRESS));
 	}
 
+	@Test
 	public void testSyncNotSupported() throws ITKMessagingException {
 		ITKAddress provider = new ITKAddressImpl(SERVICE_PROVIDER);
 		
@@ -344,7 +364,6 @@ public class ITKMessageSenderImplUnitTest extends TestCase {
 		props.setFromAddress(new ITKAddressImpl(FROM_ADDRESS));
 		
 		//Configure Sender
-		ITKMessageSenderImpl sender = new ITKMessageSenderImpl();
 		sender.setItkSenderWS(new ITKSenderWSImpl_Mock());
 		sender.setAuditService(new ITKSimpleAudit_Mock());
 		
@@ -357,10 +376,10 @@ public class ITKMessageSenderImplUnitTest extends TestCase {
 
 	}
 
+	@Test
 	public void testSend() throws ITKMessagingException {
 		
 		//Configure Sender
-		ITKMessageSenderImpl sender = new ITKMessageSenderImpl();
 		sender.setItkSenderWS(new ITKSenderWSImpl_Mock());
 		sender.setAuditService(new ITKSimpleAudit_Mock());
 		

@@ -35,4 +35,10 @@ public interface SMSCLoggingService {
 	public void logSMSPRequest(SMSPRequest request) throws LoggingException;
 	public void logSMSPResponse(SMSPResponse response) throws LoggingException;
 
+	public void logSMSCProcessInput(String conversationId, String input)
+			throws LoggingException;
+
+	public void logSMSCProcessOutcome(String conversationId, String outcome)
+			throws LoggingException;
+
 }

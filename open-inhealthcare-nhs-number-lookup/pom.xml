@@ -13,6 +13,7 @@
 
 	<dependencies>
 
+		<!-- module dependencies -->
 		<dependency>
 			<groupId>uk.co.inhealthcare.open</groupId>
 			<artifactId>open-inhealthcare-core</artifactId>
@@ -23,66 +24,43 @@
 			<artifactId>open-inhealthcare-smsc</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
+		
+		<!-- spring dependencies -->
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<artifactId>camel-spring</artifactId>
-			<groupId>org.apache.camel</groupId>
-			<version>2.13.0</version>
-		</dependency>
-		<dependency>
-			<artifactId>spring-test</artifactId>
 			<groupId>org.springframework</groupId>
-			<version>2.5.5</version>
-			<scope>test</scope>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+			<optional>true</optional>
 		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-mail</artifactId>
-			<version>2.13.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-hl7</artifactId>
-			<version>2.13.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-mina2</artifactId>
-			<version>2.13.0</version>
-		</dependency>
+
+		<!-- HL7 dependencies -->
 		<dependency>
 			<groupId>ca.uhn.hapi</groupId>
 			<artifactId>hapi-structures-v24</artifactId>
 			<version>2.1</version>
 		</dependency>
 
-
+		<!-- logging dependencies -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.7</version>
+			<version>${slf4j.version}</version>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.slf4j</groupId> -->
-<!-- 			<artifactId>slf4j-log4j12</artifactId> -->
-<!-- 			<version>1.7.7</version> -->
-<!-- 		</dependency> -->
 		<dependency>
-			<groupId>org.jbehave</groupId>
-			<artifactId>jbehave-core</artifactId>
-			<version>4.0-beta-8</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+			<optional>true</optional>
 		</dependency>
+
+		<!-- testing dependencies -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 

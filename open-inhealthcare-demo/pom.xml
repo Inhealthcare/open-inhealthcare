@@ -26,7 +26,7 @@
 	</dependencyManagement>
 
 	<dependencies>
-
+	
 		<!-- spring boot dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -38,7 +38,7 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- database dependency -->
+		<!-- database dependencies -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
@@ -48,10 +48,15 @@
 			<artifactId>h2</artifactId>
 		</dependency>
 
-		<!-- open inhealthcare dependencies -->
+		<!-- open inhealthcare module dependencies -->
 		<dependency>
 			<groupId>uk.co.inhealthcare.open</groupId>
 			<artifactId>open-inhealthcare-nhs-number-lookup</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>uk.co.inhealthcare.open</groupId>
+			<artifactId>open-inhealthcare-mybatis</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

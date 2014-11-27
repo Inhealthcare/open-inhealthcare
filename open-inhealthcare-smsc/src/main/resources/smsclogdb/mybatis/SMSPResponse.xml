@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="SMSPResponse">
+
+    <resultMap id="result" type="SMSPResponse">
+        <result property="id" column="id"/>
+        <result property="timestamp" column="timestamp"/>
+        <result property="conversationId" column="conversationId"/>
+        <result property="responseCode" column="responseCode"/>
+        <result property="response" column="response"/>
+    </resultMap> 
+ 
+    <insert id="insert" parameterType="SMSPResponse" useGeneratedKeys="true" keyProperty="id">
+ 	   INSERT INTO public."SMSPResponse" ("timestamp","conversationId",
+ 	   "responseCode", "response")
+        VALUES (#{timestamp}, #{conversationId}, #{responseCode}, #{response});
+    </insert>
+ 
+</mapper>

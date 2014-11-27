@@ -10,10 +10,9 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-*/
+ */
 package uk.co.inhealthcare.open.itk.util;
 
-import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -23,23 +22,21 @@ import java.util.Properties;
  */
 public class ITKDirectoryProperties {
 
-	private static Properties props = new Properties();
-	static {
-		try {
-			props.load(ITKDirectoryProperties.class.getResourceAsStream("/directory.properties"));			
-		} catch (IOException ex){
-			ex.printStackTrace();
-		}
+	private Properties props = new Properties();
+
+	public void setProps(Properties props) {
+		this.props = props;
 	}
-	
+
 	/**
 	 * Gets the property.
 	 *
-	 * @param propertyName the property name
+	 * @param propertyName
+	 *            the property name
 	 * @return the property
 	 */
-	public static String getProperty(String propertyName){
+	public String getProperty(String propertyName) {
 		return props.getProperty(propertyName);
 	}
-	
+
 }

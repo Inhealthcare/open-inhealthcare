@@ -13,31 +13,27 @@
 */
 package uk.co.inhealthcare.open.itk.infrastructure;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import junit.framework.TestCase;
-
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import uk.co.inhealthcare.open.itk.infrastructure.ITKAddress;
-import uk.co.inhealthcare.open.itk.infrastructure.ITKIdentity;
-import uk.co.inhealthcare.open.itk.infrastructure.ITKIdentityImpl;
-import uk.co.inhealthcare.open.itk.infrastructure.ITKMessageProperties;
-import uk.co.inhealthcare.open.itk.infrastructure.ITKMessagePropertiesImpl;
-import uk.co.inhealthcare.open.itk.infrastructure.ITKMessagingException;
 import uk.co.inhealthcare.open.itk.util.xml.DomUtils;
 
 /**
  * @author Administrator
  *
  */
-public class ITKMessagePropertiesImplUnitTest extends TestCase {
+public class ITKMessagePropertiesImplUnitTest {
 
 	@Test
 	public void testConstructor() {

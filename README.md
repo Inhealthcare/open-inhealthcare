@@ -41,3 +41,19 @@ Inhealthcare Open Integration library with open SMSC (Spine Mini Service Client)
 	EVN|A31|201405281200
 	PID|||8000002^^^RMW00^MR||SMSPDEMO30^PATIENT^^^Mrs||19581119|F|||1 MY AVENUE^^WAKEFIELD^WEST YORKS^WF1 1XX|||||||||||||||||||||NSTS02|||
 	PD1|||SAUGHALL PRACTICE^^81123|G9991234^Mister GP^GP^^^Dr|||||
+
+
+## NHS Number Lookup
+
+## SMSP integration
+ 
+## Sending ITK messages
+
+Include the itk base dependency
+
+	<dependency>
+		<groupId>uk.co.inhealthcare.open</groupId>
+		<artifactId>open-itk-base</artifactId>
+		<version>${project.version}</version>
+	</dependency>
+	

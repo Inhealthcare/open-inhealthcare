@@ -13,7 +13,6 @@
  */
 package uk.co.inhealthcare.open.itk.util;
 
-import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -22,25 +21,21 @@ import java.util.Properties;
  * @author Nick Jones
  */
 public class ITKServiceProperties {
-    
-	/** The props. */
-	private static Properties props = new Properties();
-	static {
-		try {
-			props.load(ITKServiceProperties.class.getResourceAsStream("/service.properties"));
-			
-		} catch (IOException ex){
-			ex.printStackTrace();
-		}
+
+	private Properties props = new Properties();
+
+	public void setProps(Properties props) {
+		this.props = props;
 	}
-	
+
 	/**
 	 * Gets the property.
 	 *
-	 * @param propertyName the property name
+	 * @param propertyName
+	 *            the property name
 	 * @return the property
 	 */
-	public static String getProperty(String propertyName){
+	public String getProperty(String propertyName) {
 		return props.getProperty(propertyName);
 	}
 

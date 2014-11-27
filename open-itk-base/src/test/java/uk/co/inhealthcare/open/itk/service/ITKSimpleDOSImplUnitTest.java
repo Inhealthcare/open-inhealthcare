@@ -13,21 +13,23 @@
 */
 package uk.co.inhealthcare.open.itk.service;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import uk.co.inhealthcare.open.itk.infrastructure.ITKAddressImpl;
 import uk.co.inhealthcare.open.itk.infrastructure.ITKMessagingException;
-import uk.co.inhealthcare.open.itk.service.ITKService;
-import uk.co.inhealthcare.open.itk.service.ITKSimpleDOSImpl;
+import uk.co.inhealthcare.open.itk.test.TestUtils;
 import uk.co.inhealthcare.open.itk.transport.ITKTransportRoute;
 
 /**
  * @author Administrator
  *
  */
-public class ITKSimpleDOSImplUnitTest extends TestCase {
+public class ITKSimpleDOSImplUnitTest {
 	private final static String SERVICE_ID = "urn:nhs-itk:services:201005:testServiceA-v1-0";
 	private final static String EXPLICIT_SERVICE_ID = "urn:nhs-itk:services:201005:testServiceB-v1-0";
 	private final static String UNSUPPORTED_SERVICE_ID = "urn:nhs-itk:services:201005:testServiceC-v1-0";
@@ -36,13 +38,20 @@ public class ITKSimpleDOSImplUnitTest extends TestCase {
 	private final static String ADDRESS_URI = "urn:nhs-uk:addressing:ods:TKW";
 	private final static String EXPLICIT_ADDRESS_URI = "urn:nhs-uk:addressing:ods:EXPLICIT";
 	private final static String UNK_ADDRESS_URI = "urn:nhs-uk:addressing:ods:unknown";
+	private ITKSimpleDOSImpl itkSimpleDOS;
+	
+	@Before
+	public void setup() throws Exception {
+		itkSimpleDOS = new ITKSimpleDOSImpl();
+		TestUtils.loadTestProperties(itkSimpleDOS);
+	}
 
 	@Test
 	public void testResolveDestinationNullService() {
-		ITKSimpleDOSImpl dos = new ITKSimpleDOSImpl();
 		
 		try {
-			dos.resolveDestination(null, new ITKAddressImpl(UNK_ADDRESS_URI));
+			itkSimpleDOS.resolveDestination(null, new ITKAddressImpl(
+					UNK_ADDRESS_URI));
 			fail("Failed to reject null service");
 		} catch (ITKMessagingException e1) {
 			assertTrue(true);
@@ -51,10 +60,10 @@ public class ITKSimpleDOSImplUnitTest extends TestCase {
 
 	@Test
 	public void testResolveDestinationEmptyService() {
-		ITKSimpleDOSImpl dos = new ITKSimpleDOSImpl();
 		
 		try {
-			dos.resolveDestination("", new ITKAddressImpl(UNK_ADDRESS_URI));
+			itkSimpleDOS.resolveDestination("", new ITKAddressImpl(
+					UNK_ADDRESS_URI));
 			fail("Failed to reject null service");
 		} catch (ITKMessagingException e1) {
 			assertTrue(true);
@@ -63,10 +72,9 @@ public class ITKSimpleDOSImplUnitTest extends TestCase {
 
 	@Test
 	public void testResolveDestinationNullAddress() {
-		ITKSimpleDOSImpl dos = new ITKSimpleDOSImpl();
 		
 		try {
-			dos.resolveDestination(UNK_SERVICE_ID, null);
+			itkSimpleDOS.resolveDestination(UNK_SERVICE_ID, null);
 			fail("Failed to reject null service");
 		} catch (ITKMessagingException e1) {
 			assertTrue(true);
@@ -75,10 +83,10 @@ public class ITKSimpleDOSImplUnitTest extends TestCase {
 
 	@Test
 	public void testResolveDestinationNullAddressURI() {
-		ITKSimpleDOSImpl dos = new ITKSimpleDOSImpl();
 		
 		try {
-			dos.resolveDestination(UNK_SERVICE_ID, new ITKAddressImpl(null));
+			itkSimpleDOS.resolveDestination(UNK_SERVICE_ID, new ITKAddressImpl(
+					null));
 			fail("Failed to reject null service");
 		} catch (ITKMessagingException e1) {
 			assertTrue(true);
@@ -87,10 +95,10 @@ public class ITKSimpleDOSImplUnitTest extends TestCase {
 
 	@Test
 	public void testResolveDestinationEmptyAddressURI() {
-		ITKSimpleDOSImpl dos = new ITKSimpleDOSImpl();
 		
 		try {
-			dos.resolveDestination(UNK_SERVICE_ID, new ITKAddressImpl(""));
+			itkSimpleDOS.resolveDestination(UNK_SERVICE_ID, new ITKAddressImpl(
+					""));
 			fail("Failed to reject null service");
 		} catch (ITKMessagingException e1) {
 			assertTrue(true);
@@ -99,10 +107,10 @@ public class ITKSimpleDOSImplUnitTest extends TestCase {
 
 	@Test
 	public void testResolveUnknownDestination() {
-		ITKSimpleDOSImpl dos = new ITKSimpleDOSImpl();
 		
 		try {
-			dos.resolveDestination(UNK_SERVICE_ID, new ITKAddressImpl(UNK_ADDRESS_URI));
+			itkSimpleDOS.resolveDestination(UNK_SERVICE_ID, new ITKAddressImpl(
+					UNK_ADDRESS_URI));
 			fail("Failed to reject unknown destination");
 		} catch (ITKMessagingException e1) {
 			assertTrue(true);
@@ -111,11 +119,11 @@ public class ITKSimpleDOSImplUnitTest extends TestCase {
 
 	@Test
 	public void testResolveKnownDestinationWithDefaults() {
-		ITKSimpleDOSImpl dos = new ITKSimpleDOSImpl();
 		ITKTransportRoute route = null;
 		
 		try {
-			route = dos.resolveDestination(SERVICE_ID, new ITKAddressImpl(ADDRESS_URI));
+			route = itkSimpleDOS.resolveDestination(SERVICE_ID,
+					new ITKAddressImpl(ADDRESS_URI));
 		} catch (ITKMessagingException e1) {
 			fail("Failed to find known destination");
 		}
@@ -132,11 +140,11 @@ public class ITKSimpleDOSImplUnitTest extends TestCase {
 	
 	@Test
 	public void testResolveKnownDestinationExplicit() {
-		ITKSimpleDOSImpl dos = new ITKSimpleDOSImpl();
 		ITKTransportRoute route = null;
 		
 		try {
-			route = dos.resolveDestination(SERVICE_ID, new ITKAddressImpl(EXPLICIT_ADDRESS_URI));
+			route = itkSimpleDOS.resolveDestination(SERVICE_ID,
+					new ITKAddressImpl(EXPLICIT_ADDRESS_URI));
 		} catch (ITKMessagingException e1) {
 			fail("Failed to find known destination");
 		}
@@ -152,10 +160,9 @@ public class ITKSimpleDOSImplUnitTest extends TestCase {
 	
 	@Test
 	public void testGetNullService() {
-		ITKSimpleDOSImpl dos = new ITKSimpleDOSImpl();
 		
 		try {
-			dos.getService(null);
+			itkSimpleDOS.getService(null);
 			fail("Failed to reject bad service name");
 		} catch (ITKMessagingException e1) {
 			assertTrue(true);
@@ -164,10 +171,9 @@ public class ITKSimpleDOSImplUnitTest extends TestCase {
 	
 	@Test
 	public void testGetBlankService() {
-		ITKSimpleDOSImpl dos = new ITKSimpleDOSImpl();
 		
 		try {
-			dos.getService("");
+			itkSimpleDOS.getService("");
 			fail("Failed to reject bad service name");
 		} catch (ITKMessagingException e1) {
 			assertTrue(true);
@@ -176,10 +182,9 @@ public class ITKSimpleDOSImplUnitTest extends TestCase {
 
 	@Test
 	public void testGetUnknownService() {
-		ITKSimpleDOSImpl dos = new ITKSimpleDOSImpl();
 		
 		try {
-			dos.getService(UNK_SERVICE_ID);
+			itkSimpleDOS.getService(UNK_SERVICE_ID);
 			fail("Failed to reject bad service name");
 		} catch (ITKMessagingException e1) {
 			assertTrue(true);
@@ -188,10 +193,9 @@ public class ITKSimpleDOSImplUnitTest extends TestCase {
 	
 	@Test
 	public void testGetUnsupportedService() {
-		ITKSimpleDOSImpl dos = new ITKSimpleDOSImpl();
 		
 		try {
-			dos.getService(UNSUPPORTED_SERVICE_ID);
+			itkSimpleDOS.getService(UNSUPPORTED_SERVICE_ID);
 			fail("Failed to reject unsupported service name");
 		} catch (ITKMessagingException e1) {
 			assertTrue(e1.getMessage().contains("Service not supported"));
@@ -200,11 +204,10 @@ public class ITKSimpleDOSImplUnitTest extends TestCase {
 	
 	@Test
 	public void testGetValidServiceA() {
-		ITKSimpleDOSImpl dos = new ITKSimpleDOSImpl();
 		ITKService service = null;
 		
 		try {
-			service = dos.getService(SERVICE_ID);
+			service = itkSimpleDOS.getService(SERVICE_ID);
 		} catch (ITKMessagingException e1) {
 			fail("Failed to find service name");
 		}
@@ -219,11 +222,10 @@ public class ITKSimpleDOSImplUnitTest extends TestCase {
 	
 	@Test
 	public void testGetValidServiceB() {
-		ITKSimpleDOSImpl dos = new ITKSimpleDOSImpl();
 		ITKService service = null;
 		
 		try {
-			service = dos.getService(EXPLICIT_SERVICE_ID);
+			service = itkSimpleDOS.getService(EXPLICIT_SERVICE_ID);
 		} catch (ITKMessagingException e1) {
 			fail("Failed to find service name");
 		}

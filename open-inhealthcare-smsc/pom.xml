@@ -9,18 +9,14 @@
 	</parent>
 
 	<artifactId>open-inhealthcare-smsc</artifactId>
-	<name>Open Inhealthcare SMSC</name>
+	<name>Open Inhealthcare Spine Mini Service Client SMSC</name>
 
 	<dependencies>
-
+	
+		<!-- core dependencies -->
 		<dependency>
 			<groupId>uk.co.inhealthcare.open</groupId>
 			<artifactId>open-inhealthcare-core</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>uk.co.inhealthcare.open</groupId>
-			<artifactId>open-itk-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -29,41 +25,26 @@
 			<version>${project.version}</version>
 		</dependency>
 
+		<!-- testing dependencies -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
-		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<artifactId>camel-spring</artifactId> -->
-<!-- 			<groupId>org.apache.camel</groupId> -->
-<!-- 			<version>2.13.0</version> -->
-<!-- 		</dependency> -->
-		<dependency>
-			<artifactId>spring-test</artifactId>
-			<groupId>org.springframework</groupId>
-			<version>2.5.5</version>
-			<scope>test</scope>
-		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>log4j</groupId> -->
-<!-- 			<artifactId>log4j</artifactId> -->
-<!-- 			<version>1.2.17</version> -->
-<!-- 		</dependency> -->
-
-
-
+		</dependency>		
+		
+		<!-- logging dependencies -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.7</version>
+			<version>${slf4j.version}</version>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.slf4j</groupId> -->
-<!-- 			<artifactId>slf4j-log4j12</artifactId> -->
-<!-- 			<version>1.7.7</version> -->
-<!-- 		</dependency> -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+			<optional>true</optional>
+		</dependency>
 
 	</dependencies>
 

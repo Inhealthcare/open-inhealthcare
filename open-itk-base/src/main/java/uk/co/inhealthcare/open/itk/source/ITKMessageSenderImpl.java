@@ -39,7 +39,6 @@ import uk.co.inhealthcare.open.itk.payload.ITKMessage;
 import uk.co.inhealthcare.open.itk.service.ITKAuditDetailsImpl;
 import uk.co.inhealthcare.open.itk.service.ITKService;
 import uk.co.inhealthcare.open.itk.service.ITKSimpleAuditImpl;
-import uk.co.inhealthcare.open.itk.service.ITKSimpleDOSImpl;
 import uk.co.inhealthcare.open.itk.transport.ITKSender;
 import uk.co.inhealthcare.open.itk.transport.ITKTransportRoute;
 import uk.co.inhealthcare.open.itk.util.ITKLogFormatter;
@@ -60,6 +59,10 @@ public class ITKMessageSenderImpl implements ITKMessageSender {
 	}
 
 	private DirectoryOfServices directoryOfServices;
+
+	public void setDirectoryOfServices(DirectoryOfServices directoryOfServices) {
+		this.directoryOfServices = directoryOfServices;
+	}
 	
 	private ITKSender itkSenderWS = null;
 	public void setItkSenderWS(ITKSender itkSenderWS){
@@ -69,15 +72,6 @@ public class ITKMessageSenderImpl implements ITKMessageSender {
 	public void setToItkTransform(String toItkTransform) {
 		this.toItkTransform = toItkTransform;
 	}
-
-
-	/**
-	 * Instantiates a new iTK message sender impl.
-	 */
-	public ITKMessageSenderImpl() {
-		this.directoryOfServices = new ITKSimpleDOSImpl();
-	}
-
 	
 	/* (non-Javadoc)
 	 * @see uk.nhs.interoperability.source.ITKMessageSender#sendSync(uk.nhs.interoperability.payload.ITKMessage)

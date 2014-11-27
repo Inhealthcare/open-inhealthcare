@@ -30,6 +30,24 @@ public class SMSCLoggingService_Mock implements SMSCLoggingService {
 	public ArrayList<SMSPRequest> parm_SMSPRequest = new ArrayList<SMSPRequest>();
 	public ArrayList<SMSPResponse> parm_SMSPResponse = new ArrayList<SMSPResponse>();
 
+	private String smscInputOutcome;
+
+	public void primeSmscInputOutcome(String smscInputOutcome) {
+		this.smscInputOutcome = smscInputOutcome;
+	}
+
+	private String smscOutcomeOutcome;
+
+	public void primeSmscOutcomeOutcome(String smscOutcomeOutcome) {
+		this.smscOutcomeOutcome = smscOutcomeOutcome;
+	}
+
+	public ArrayList<String> parm_inputConversationId = new ArrayList<String>();
+	public ArrayList<String> parm_DemographicUpdate = new ArrayList<String>();
+
+	public ArrayList<String> parm_outcomeConversationId = new ArrayList<String>();
+	public ArrayList<String> parm_Outcome = new ArrayList<String>();
+
 
 	@Override
 	public void logSMSPRequest(SMSPRequest request) throws LoggingException {
@@ -47,4 +65,24 @@ public class SMSCLoggingService_Mock implements SMSCLoggingService {
 		parm_SMSPResponse.add(response);
 	}
 	
+	@Override
+	public void logSMSCProcessInput(String conversationId, String input)
+			throws LoggingException {
+		if ((smscInputOutcome != null) && (smscInputOutcome.equals(FAIL))) {
+			throw new LoggingException(SMSC_INPUT_ERROR);
+		}
+		parm_inputConversationId.add(conversationId);
+		parm_DemographicUpdate.add(input);
+	}
+
+	@Override
+	public void logSMSCProcessOutcome(String conversationId, String outcome)
+			throws LoggingException {
+		if ((smscOutcomeOutcome != null) && (smscOutcomeOutcome.equals(FAIL))) {
+			throw new LoggingException(SMSC_OUTCOME_ERROR);
+		}
+		parm_outcomeConversationId.add(conversationId);
+		parm_Outcome.add(outcome);
+	}
+
 }

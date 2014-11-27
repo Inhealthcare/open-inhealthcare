@@ -10,7 +10,7 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-*/
+ */
 package uk.co.inhealthcare.open.smsc.messages.logging;
 
 import java.text.SimpleDateFormat;
@@ -24,49 +24,84 @@ import uk.co.inhealthcare.open.smsc.messages.SMSPRequest;
 import uk.co.inhealthcare.open.smsc.messages.SMSPResponse;
 
 /**
- * The Class ITKSimpleAudit. 
- * This class is a fallback to audit to the current log file when there is no Audit Service defined.
+ * The Class ITKSimpleAudit. This class is a fallback to audit to the current
+ * log file when there is no Audit Service defined.
  *
  * @author Nick Jones
  * @since 0.1
  */
 public class SimpleSMSCLoggingServiceImpl implements SMSCLoggingService {
 
-	private final static Logger logger = LoggerFactory.getLogger(SimpleSMSCLoggingServiceImpl.class);
-	
+	private final static Logger logger = LoggerFactory
+			.getLogger(SimpleSMSCLoggingServiceImpl.class);
+
 	/** The Constant DATE_FORMAT. */
-	private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS Z");
-	
-    public SimpleSMSCLoggingServiceImpl(){
-        DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
-    }
-    
-	public void logSMSPRequest(SMSPRequest request) throws LoggingException {
-		
-		logger.info("SMSP Logging using default SimpleSMSCLoggingServiceImpl. Consider implementing a database implementation");
-		
-		String logMessage = DATE_FORMAT.format(Calendar.getInstance().getTime()) + 
-							"[CONVID]"+request.getConversationId()+
-						    "[TYPE]"+request.getClass().getSimpleName()+
-						    "[REQUEST]"+request.serialise()+
-						    "";
-		logger.info(logMessage);
-	
+	private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
+			"yyyy/MM/dd HH:mm:ss.SSS Z");
+
+	public SimpleSMSCLoggingServiceImpl() {
+		DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
 	}
-		
+
+	public void logSMSPRequest(SMSPRequest request) throws LoggingException {
+
+		logger.info("SMSP Logging using default SimpleSMSCLoggingServiceImpl. Consider implementing a database implementation");
+
+		String logMessage = DATE_FORMAT
+				.format(Calendar.getInstance().getTime())
+				+ "[CONVID]"
+				+ request.getConversationId()
+				+ "[TYPE]"
+				+ request.getClass().getSimpleName()
+				+ "[REQUEST]"
+				+ request.serialise() + "";
+		logger.info(logMessage);
+
+	}
+
 	public void logSMSPResponse(SMSPResponse response) throws LoggingException {
-		
+
 		logger.info("SMSP logging using default SimpleSMSCLoggingServiceImpl. Consider implementing a database implementation");
-		
-		String logMessage = DATE_FORMAT.format(Calendar.getInstance().getTime()) + 
-				"[CONVID]"+response.getConversationId()+
-			    "[TYPE]"+response.getClass().getSimpleName()+
-			    "[RSP:CODE]"+response.getResponseCode()+
-			    "[RSP:BODY]"+response.serialise()+
-			    "";
+
+		String logMessage = DATE_FORMAT
+				.format(Calendar.getInstance().getTime())
+				+ "[CONVID]"
+				+ response.getConversationId()
+				+ "[TYPE]"
+				+ response.getClass().getSimpleName()
+				+ "[RSP:CODE]"
+				+ response.getResponseCode()
+				+ "[RSP:BODY]"
+				+ response.serialise() + "";
 
 		logger.info(logMessage);
 	}
-		
+
+	public void logSMSCProcessOutcome(String conversationId, String outcome)
+			throws LoggingException {
+
+		logger.info("SMSP Logging using default SimpleSMSCLoggingServiceImpl. Consider implementing a database implementation");
+
+		String logMessage = DATE_FORMAT
+				.format(Calendar.getInstance().getTime())
+				+ "[CONVID]"
+				+ conversationId + "[PROCESS]" + outcome + "";
+		logger.info(logMessage);
+
+	}
+
+	@Override
+	public void logSMSCProcessInput(String conversationId, String input)
+			throws LoggingException {
+
+		logger.info("SMSP Logging using default SimpleSMSCLoggingServiceImpl. Consider implementing a database implementation");
+
+		String logMessage = DATE_FORMAT
+				.format(Calendar.getInstance().getTime())
+				+ "[CONVID]"
+				+ conversationId + "[DEMOUPDATE]" + input + "";
+		logger.info(logMessage);
+
+	}
 
 }

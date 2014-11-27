@@ -24,11 +24,11 @@ import uk.co.inhealthcare.open.jsat.ConfigurationException;
 import uk.co.inhealthcare.open.jsat.GeneralException;
 import uk.co.inhealthcare.open.jsat.JSATComponent;
 import uk.co.inhealthcare.open.jsat.TransformationException;
-import uk.co.inhealthcare.open.jsat.logging.ProcessLoggingService;
 import uk.co.inhealthcare.open.jsat.services.EmailSender;
 import uk.co.inhealthcare.open.jsat.services.HL7Sender;
 import uk.co.inhealthcare.open.smsc.messages.logging.LoggingException;
 import uk.co.inhealthcare.open.smsc.messages.logging.SMSCLoggingService;
+import uk.co.inhealthcare.open.smsc.messages.logging.SimpleSMSCLoggingServiceImpl;
 import uk.co.inhealthcare.open.smsc.transformations.api.A05ToDemographicUpdate;
 import uk.co.inhealthcare.open.smsc.transformations.api.ToPASUpdate;
 import ca.uhn.hl7v2.HL7Exception;
@@ -77,14 +77,8 @@ public abstract class SMSCProcess extends JSATComponent {
 	protected HL7Sender hl7Sender; 
 	protected EmailSender technicalAlerter;
 	protected EmailSender businessAlerter;
-	protected SMSCLoggingService smscLogger; 
-	protected ProcessLoggingService processLogger;
+	protected SMSCLoggingService smscLogger = new SimpleSMSCLoggingServiceImpl();
 
-	public void setProcessLogger(
-			ProcessLoggingService processLoggingService) {
-		this.processLogger = processLoggingService;
-	}
-	
 	public void setSmscLogger(SMSCLoggingService smscLogger) {
 		this.smscLogger = smscLogger;
 	}
@@ -147,8 +141,7 @@ public abstract class SMSCProcess extends JSATComponent {
 			} 
 			
 			try {
-				processLogger.logSMSCProcessInput(conversationId,
-						update);
+				smscLogger.logSMSCProcessInput(conversationId, update.toXml());
 			} catch (LoggingException e) {
 				logAndAlertFailure(conversationId, "Error logging inbound message", e.getMessage(), "","");
 				return;
@@ -170,7 +163,8 @@ public abstract class SMSCProcess extends JSATComponent {
 		String outcome;
 		try {
 			outcome = processDetail(update, props);
-			processLogger.logSMSCProcessOutcome(
+			smscLogger
+					.logSMSCProcessOutcome(
 					props.getConversationId(), outcome);
 		} catch (HL7Exception e) {
 			logAndAlertFailure(props.getConversationId(), "HL7 Error sending PAS update:", e.getMessage(), props.getEncodedMSH(),update.toXml());
@@ -268,7 +262,7 @@ public abstract class SMSCProcess extends JSATComponent {
 		
 		if (smscLogger != null) {
 			try {
-				processLogger.logSMSCProcessOutcome(conversationId,
+				smscLogger.logSMSCProcessOutcome(conversationId,
 						message);
 			} catch (LoggingException logEx) {
 				logger.error(ERR_UNABLE_TO_WRITE_SMSCLOG);

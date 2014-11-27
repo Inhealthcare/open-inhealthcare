@@ -13,6 +13,9 @@
 */
 package uk.co.inhealthcare.open.itk.transform;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,14 +23,11 @@ import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
-import junit.framework.TestCase;
-
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import uk.co.inhealthcare.open.itk.infrastructure.ITKMessagingException;
-import uk.co.inhealthcare.open.itk.transform.TransformManager;
 import uk.co.inhealthcare.open.itk.util.xml.DomUtils;
 import uk.co.inhealthcare.open.itk.util.xml.XPaths;
 
@@ -35,7 +35,7 @@ import uk.co.inhealthcare.open.itk.util.xml.XPaths;
  * @author Administrator
  *
  */
-public class TransformManagerUnitTest extends TestCase {
+public class TransformManagerUnitTest {
 
 	@Test
 	public void testTransformNoParms() throws IOException, SAXException, ParserConfigurationException {

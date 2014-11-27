@@ -49,6 +49,19 @@ public class ITKSimpleDOSImpl implements DirectoryOfServices {
 	private static final String ROUTE_TYPE = "RouteType";
 	private static final String PHYSICAL_DESTINATION = "PhysicalDestination";
 
+	private ITKDirectoryProperties itkDirectoryProperties;
+	private ITKServiceProperties itkServiceProperties;
+
+	public void setItkDirectoryProperties(
+			ITKDirectoryProperties itkDirectoryProperties) {
+		this.itkDirectoryProperties = itkDirectoryProperties;
+	}
+
+	public void setItkServiceProperties(
+			ITKServiceProperties itkServiceProperties) {
+		this.itkServiceProperties = itkServiceProperties;
+	}
+
 	/* (non-Javadoc)
 	 * @see uk.nhs.interoperability.capabilities.DirectoryOfServices#resolveDestination(java.lang.String, uk.nhs.interoperability.infrastructure.ITKAddress)
 	 */
@@ -73,7 +86,7 @@ public class ITKSimpleDOSImpl implements DirectoryOfServices {
 		String channelKey = svc + "." + add + "." + CHANNELID;
 		logger.trace("Channel Key:"+channelKey);
 		
-		String channelId = ITKDirectoryProperties.getProperty(channelKey);
+		String channelId = itkDirectoryProperties.getProperty(channelKey);
 		
 		if (null==channelId){
 			String eMsg = "Route not found for:"+channelKey;
@@ -113,9 +126,11 @@ public class ITKSimpleDOSImpl implements DirectoryOfServices {
 	 * @return the directory property
 	 */
 	private String getDirectoryProperty(String channelId, String propertyName){
-		String propertyValue = ITKDirectoryProperties.getProperty(channelId+"."+propertyName);
+		String propertyValue = itkDirectoryProperties.getProperty(channelId
+				+ "." + propertyName);
 		if (propertyValue==null){
-			propertyValue = ITKDirectoryProperties.getProperty(DEFAULT+"."+propertyName);
+			propertyValue = itkDirectoryProperties.getProperty(DEFAULT + "."
+					+ propertyName);
 		}
 		if (propertyValue==null){
 			propertyValue = "";
@@ -153,7 +168,7 @@ public class ITKSimpleDOSImpl implements DirectoryOfServices {
 	 */
 	public boolean isServiceProfileSupported(String profileId){
 		String profileKey = PROFILE+"."+profileId+"."+IS_SUPPORTED;
-		String supported = ITKServiceProperties.getProperty(profileKey);
+		String supported = itkServiceProperties.getProperty(profileKey);
 		if ((supported!=null) &&(supported.equalsIgnoreCase("Y"))){
 			return true;
 		} else {	
@@ -170,9 +185,11 @@ public class ITKSimpleDOSImpl implements DirectoryOfServices {
 	 */
 	private String getServiceProperty(String serviceId, String propertyName){
 	
-		String propertyValue = ITKServiceProperties.getProperty(serviceId+"."+propertyName);
+		String propertyValue = itkServiceProperties.getProperty(serviceId + "."
+				+ propertyName);
 		if (propertyValue==null){
-			propertyValue = ITKServiceProperties.getProperty(DEFAULT+"."+propertyName);
+			propertyValue = itkServiceProperties.getProperty(DEFAULT + "."
+					+ propertyName);
 		}
 		if (propertyValue==null){
 			propertyValue = "";
@@ -192,14 +209,16 @@ public class ITKSimpleDOSImpl implements DirectoryOfServices {
 		boolean propertyValue = false;
 		if (!propertyName.equals("")){
 
-			String serviceProperty = ITKServiceProperties.getProperty(serviceId+"."+propertyName);
+			String serviceProperty = itkServiceProperties.getProperty(serviceId
+					+ "." + propertyName);
 			
 			if (null!=serviceProperty){
 				if (serviceProperty.equals("Y")){
 					propertyValue = true;
 				}
 			} else {
-				serviceProperty = ITKServiceProperties.getProperty("DEFAULT."+propertyName);
+				serviceProperty = itkServiceProperties.getProperty("DEFAULT."
+						+ propertyName);
 				
 			}
 		}

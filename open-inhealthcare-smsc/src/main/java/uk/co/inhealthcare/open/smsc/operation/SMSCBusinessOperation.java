@@ -31,6 +31,7 @@ import uk.co.inhealthcare.open.smsc.messages.SMSPRequest;
 import uk.co.inhealthcare.open.smsc.messages.SMSPResponse;
 import uk.co.inhealthcare.open.smsc.messages.logging.LoggingException;
 import uk.co.inhealthcare.open.smsc.messages.logging.SMSCLoggingService;
+import uk.co.inhealthcare.open.smsc.messages.logging.SimpleSMSCLoggingServiceImpl;
 import uk.co.inhealthcare.open.smsc.validator.NHSNumber;
 
 // CONSIDER : Consider removing dependency on ITKBusinessOperation and JSATComponent. 
@@ -66,7 +67,8 @@ public abstract class SMSCBusinessOperation extends ITKBusinessOperation {
 	protected final static int TRACE = 1;
 	protected final static int VERIFY = 2;
 	
-	protected SMSCLoggingService smscLogger = null;
+	protected SMSCLoggingService smscLogger = new SimpleSMSCLoggingServiceImpl();
+
 	public void setSmscLogger(SMSCLoggingService smscLogger) {
 		this.smscLogger = smscLogger;
 	}
